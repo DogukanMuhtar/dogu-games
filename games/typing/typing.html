@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Typing Speed | Doğu Games</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+            padding: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: #050505;
+
+            color: #f5f5dc;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            overflow: hidden;
+
+        }
+
+
+        /* ==========================================
+           MAIN WRAPPER
+        ========================================== */
+
+        .typing-wrapper {
+
+            width:
+                min(
+                    1100px,
+                    calc(100vw - 40px)
+                );
+
+            height: 100vh;
+
+            margin: auto;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        /* ==========================================
+           HEADER
+        ========================================== */
+
+        .typing-header {
+
+            height: 105px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            border-bottom:
+                1px solid #333;
+
+        }
+
+
+        /* ==========================================
+           BACK BUTTON
+        ========================================== */
+
+        .back-btn {
+
+            display: inline-block;
+
+            padding:
+                12px 16px;
+
+            border:
+                2px solid #333;
+
+            color: #f5f5dc;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+
+        }
+
+
+        .back-btn:hover {
+
+            color: #39ff14;
+
+            border-color:
+                #39ff14;
+
+        }
+
+
+        /* ==========================================
+           TITLE
+        ========================================== */
+
+        h1 {
+
+            margin: 0;
+
+            font-size:
+                clamp(
+                    24px,
+                    3vw,
+                    36px
+                );
+
+            letter-spacing: 4px;
+
+            text-align: center;
+
+        }
+
+
+        h1 span {
+
+            color:
+                #39ff14;
+
+        }
+
+
+        /* ==========================================
+           STATS
+        ========================================== */
+
+        .typing-stats {
+
+            display: flex;
+
+            gap: 5px;
+
+        }
+
+
+        .stat {
+
+            min-width: 58px;
+
+            padding:
+                7px 5px;
+
+            border:
+                2px solid #333;
+
+            text-align: center;
+
+            font-size: 8px;
+
+            font-weight: bold;
+
+        }
+
+
+        .stat-value {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color:
+                #39ff14;
+
+            font-size: 13px;
+
+        }
+
+
+        /* ==========================================
+           GAME AREA
+        ========================================== */
+
+        #typing-game {
+
+            position: relative;
+
+            flex: 1;
+
+            min-height: 0;
+
+            margin-top: 20px;
+
+            margin-bottom: 10px;
+
+            padding:
+                30px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border:
+                2px solid #333;
+
+            background: #050505;
+
+        }
+
+
+        /* ==========================================
+           INFO
+        ========================================== */
+
+        .typing-info {
+
+            margin-bottom:
+                20px;
+
+            color:
+                #777;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                2px;
+
+        }
+
+
+        /* ==========================================
+           TEXT
+        ========================================== */
+
+        #text-display {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            min-height: 130px;
+
+            padding:
+                24px;
+
+            border:
+                2px solid #222;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .65
+                );
+
+            font-size:
+                clamp(
+                    17px,
+                    2vw,
+                    24px
+                );
+
+            line-height:
+                1.8;
+
+            letter-spacing:
+                1px;
+
+            word-wrap:
+                break-word;
+
+            transition:
+                border-color .2s,
+                box-shadow .2s;
+
+        }
+
+
+        .correct {
+
+            color:
+                #39ff14;
+
+        }
+
+
+        .incorrect {
+
+            color:
+                #ff1744;
+
+            text-decoration:
+                underline;
+
+        }
+
+
+        .current {
+
+            color:
+                #f5f5dc;
+
+            border-bottom:
+                2px solid #39ff14;
+
+        }
+
+
+        .pending {
+
+            color:
+                #555;
+
+        }
+
+
+        /* ==========================================
+           INPUT
+        ========================================== */
+
+        #typing-input {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            margin-top:
+                20px;
+
+            padding:
+                15px;
+
+            background:
+                #080808;
+
+            border:
+                2px solid #333;
+
+            outline:
+                none;
+
+            color:
+                #f5f5dc;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size:
+                17px;
+
+        }
+
+
+        #typing-input:focus {
+
+            border-color:
+                #39ff14;
+
+        }
+
+
+        #typing-input:disabled {
+
+            opacity:
+                .35;
+
+        }
+
+
+        /* ==========================================
+           START SCREEN
+        ========================================== */
+
+        #start-screen {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            z-index:
+                20;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                rgba(
+                    5,
+                    5,
+                    5,
+                    .97
+                );
+
+            text-align:
+                center;
+
+            padding:
+                20px;
+
+        }
+
+
+        #start-screen h2 {
+
+            margin:
+                0 0 15px;
+
+            color:
+                #39ff14;
+
+            font-size:
+                30px;
+
+            letter-spacing:
+                3px;
+
+        }
+
+
+        #start-screen p {
+
+            margin:
+                0 0 25px;
+
+            max-width:
+                650px;
+
+            color:
+                #999;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.8;
+
+        }
+
+
+        #start-screen strong {
+
+            color:
+                #39ff14;
+
+        }
+
+
+        /* ==========================================
+           TIME SELECTION
+        ========================================== */
+
+        .time-selection {
+
+            margin-bottom:
+                22px;
+
+        }
+
+
+        .time-title {
+
+            margin-bottom:
+                10px;
+
+            color:
+                #777;
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                2px;
+
+        }
+
+
+        .time-options {
+
+            display:
+                flex;
+
+            gap:
+                6px;
+
+        }
+
+
+        .time-btn {
+
+            padding:
+                8px 12px;
+
+            background:
+                transparent;
+
+            border:
+                1px solid #333;
+
+            color:
+                #777;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size:
+                10px;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .time-btn:hover {
+
+            border-color:
+                #39ff14;
+
+            color:
+                #39ff14;
+
+        }
+
+
+        .time-btn.active {
+
+            border-color:
+                #39ff14;
+
+            color:
+                #39ff14;
+
+            background:
+                rgba(
+                    57,
+                    255,
+                    20,
+                    .08
+                );
+
+        }
+
+
+        /* ==========================================
+           START BUTTON
+        ========================================== */
+
+        #start-btn {
+
+            padding:
+                13px 30px;
+
+            background:
+                transparent;
+
+            border:
+                2px solid #39ff14;
+
+            color:
+                #39ff14;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-weight:
+                bold;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        #start-btn:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #050505;
+
+        }
+
+
+        /* ==========================================
+           FLOATING SCORE
+        ========================================== */
+
+        .floating-score {
+
+            position:
+                fixed;
+
+            z-index:
+                100;
+
+            pointer-events:
+                none;
+
+            color:
+                #39ff14;
+
+            font-size:
+                17px;
+
+            font-weight:
+                bold;
+
+            animation:
+                scoreFloat .8s
+                ease-out
+                forwards;
+
+        }
+
+
+        .floating-score.penalty {
+
+            color:
+                #ff1744;
+
+        }
+
+
+        @keyframes scoreFloat {
+
+            0% {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+            100% {
+
+                opacity: 0;
+
+                transform:
+                    translateY(-55px)
+                    scale(1.2);
+
+            }
+
+        }
+
+
+        /* ==========================================
+           COMBO POPUP
+        ========================================== */
+
+        .combo-pop {
+
+            position:
+                absolute;
+
+            top:
+                20px;
+
+            right:
+                25px;
+
+            color:
+                #39ff14;
+
+            font-size:
+                18px;
+
+            font-weight:
+                bold;
+
+            letter-spacing:
+                2px;
+
+            opacity:
+                0;
+
+            pointer-events:
+                none;
+
+        }
+
+
+        .combo-pop.show {
+
+            animation:
+                comboPop .55s
+                ease-out;
+
+        }
+
+
+        @keyframes comboPop {
+
+            0% {
+
+                opacity: 0;
+
+                transform:
+                    translateY(10px)
+                    scale(.8);
+
+            }
+
+            30% {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1.1);
+
+            }
+
+            100% {
+
+                opacity: 0;
+
+                transform:
+                    translateY(-15px)
+                    scale(1);
+
+            }
+
+        }
+
+
+        /* ==========================================
+           WORD EFFECT
+        ========================================== */
+
+        .word-complete {
+
+            animation:
+                wordFlash .35s
+                ease-out;
+
+        }
+
+
+        @keyframes wordFlash {
+
+            0% {
+
+                box-shadow:
+                    0 0 0
+                    rgba(
+                        57,
+                        255,
+                        20,
+                        0
+                    );
+
+            }
+
+            50% {
+
+                box-shadow:
+                    0 0 35px
+                    rgba(
+                        57,
+                        255,
+                        20,
+                        .45
+                    );
+
+            }
+
+            100% {
+
+                box-shadow:
+                    0 0 0
+                    rgba(
+                        57,
+                        255,
+                        20,
+                        0
+                    );
+
+            }
+
+        }
+
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+
+        .typing-footer {
+
+            height:
+                30px;
+
+            flex-shrink:
+                0;
+
+            text-align:
+                center;
+
+            color:
+                #666;
+
+            font-size:
+                9px;
+
+            letter-spacing:
+                2px;
+
+        }
+
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+
+        @media (
+            max-width: 1000px
+        ) {
+
+            .typing-header {
+
+                height:
+                    80px;
+
+            }
+
+
+            .typing-stats {
+
+                display:
+                    none;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 650px
+        ) {
+
+            .typing-wrapper {
+
+                width:
+                    calc(
+                        100vw - 14px
+                    );
+
+            }
+
+
+            .typing-header {
+
+                gap:
+                    10px;
+
+            }
+
+
+            h1 {
+
+                font-size:
+                    19px;
+
+                letter-spacing:
+                    2px;
+
+            }
+
+
+            .back-btn {
+
+                padding:
+                    8px;
+
+                font-size:
+                    8px;
+
+            }
+
+
+            #typing-game {
+
+                padding:
+                    12px;
+
+            }
+
+
+            #text-display {
+
+                padding:
+                    15px;
+
+                font-size:
+                    16px;
+
+            }
+
+
+            .time-btn {
+
+                padding:
+                    7px 8px;
+
+                font-size:
+                    8px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="typing-wrapper">
+
+
+    <!-- ==========================================
+         HEADER
+    ========================================== -->
+
+    <header class="typing-header">
+
+
+        <a
+            href="../../index.html"
+            class="back-btn"
+        >
+            ← ANA SAYFA
+        </a>
+
+
+        <h1>
+
+            TYPING SPEED
+
+            <span>///</span>
+
+        </h1>
+
+
+        <div class="typing-stats">
+
+
+            <div class="stat">
+
+                WPM
+
+                <span
+                    class="stat-value"
+                    id="wpm"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                ACCURACY
+
+                <span
+                    class="stat-value"
+                    id="accuracy"
+                >
+                    100%
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                TIME
+
+                <span
+                    class="stat-value"
+                    id="time"
+                >
+                    30
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                ERRORS
+
+                <span
+                    class="stat-value"
+                    id="errors"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                COMBO
+
+                <span
+                    class="stat-value"
+                    id="combo"
+                >
+                    x0
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                SCORE
+
+                <span
+                    class="stat-value"
+                    id="score"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="stat">
+
+                BEST
+
+                <span
+                    class="stat-value"
+                    id="best-score"
+                >
+                    0
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==========================================
+         GAME
+    ========================================== -->
+
+    <main id="typing-game">
+
+
+        <!-- START / GAME OVER SCREEN -->
+
+        <div id="start-screen">
+
+
+            <h2>
+                TYPING SPEED
+            </h2>
+
+
+            <p id="start-description">
+
+                TYPE THE TEXT AS FAST AND
+                ACCURATELY AS POSSIBLE.
+
+                <br>
+
+                BUILD YOUR COMBO AND
+                BEAT YOUR BEST SCORE.
+
+            </p>
+
+
+            <!-- TIME -->
+
+            <div class="time-selection">
+
+
+                <div class="time-title">
+
+                    SELECT TIME
+
+                </div>
+
+
+                <div class="time-options">
+
+
+                    <button
+                        type="button"
+                        class="time-btn"
+                        data-time="15"
+                    >
+                        15 SEC
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="time-btn active"
+                        data-time="30"
+                    >
+                        30 SEC
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="time-btn"
+                        data-time="60"
+                    >
+                        60 SEC
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="time-btn"
+                        data-time="120"
+                    >
+                        120 SEC
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="start-btn"
+            >
+                START GAME
+            </button>
+
+
+        </div>
+
+
+        <div class="typing-info">
+
+            TYPE THE TEXT BELOW
+
+        </div>
+
+
+        <div id="text-display"></div>
+
+
+        <input
+            id="typing-input"
+            type="text"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            disabled
+        >
+
+
+        <div
+            id="combo-pop"
+            class="combo-pop"
+        >
+        </div>
+
+
+    </main>
+
+
+    <div class="typing-footer">
+
+        SPEED • ACCURACY • COMBO • PRECISION
+
+    </div>
+
+
+</div>
+
+
+<script src="typing.js"></script>
+
+</body>
+
+</html>

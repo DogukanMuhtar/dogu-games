@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>2048 /// DOĞU GAMES</title>
+
+
+    <style>
+
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    background: #050505;
+    color: #ffffff;
+    font-family: "Courier New", Courier, monospace;
+    overflow: hidden;
+}
+
+/* =========================================
+   PAGE
+========================================= */
+
+.game-page {
+    width: min(1290px, calc(100% - 40px));
+    height: 100vh;
+    margin: 0 auto;
+
+    padding-top: 34px;
+    padding-bottom: 18px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.top-header {
+    flex: 0 0 auto;
+
+    height: 90px;
+
+    display: grid;
+
+    grid-template-columns:
+        180px
+        1fr
+        auto;
+
+    align-items: start;
+
+    border-bottom: 1px solid #292929;
+
+    padding-bottom: 25px;
+}
+
+/* =========================================
+   BACK
+========================================= */
+
+.back-button {
+    width: 126px;
+    height: 49px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #353535;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: bold;
+
+    transition: .2s;
+}
+
+.back-button:hover {
+    border-color: #39ff14;
+    color: #39ff14;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+.game-title {
+    text-align: center;
+    padding-top: 0;
+}
+
+.game-title h1 {
+    font-size: clamp(38px, 4vw, 56px);
+
+    line-height: .95;
+
+    letter-spacing: 4px;
+
+    font-weight: 900;
+
+    color: #f2f0e5;
+}
+
+.game-title h1 span {
+    color: #39ff14;
+
+    margin-left: 10px;
+
+    letter-spacing: 5px;
+}
+
+.game-title p {
+    margin-top: 8px;
+
+    color: #666666;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats {
+    display: flex;
+    gap: 6px;
+}
+
+.stat-box {
+    width: 78px;
+    height: 54px;
+
+    border: 1px solid #303030;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background: #060606;
+}
+
+.stat-box span {
+    color: #777777;
+
+    font-size: 8px;
+
+    margin-bottom: 5px;
+
+    font-weight: bold;
+}
+
+.stat-box strong {
+    color: #39ff14;
+
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+/* =========================================
+   GAME CONTAINER
+========================================= */
+
+.game-container {
+    flex: 1;
+
+    min-height: 0;
+
+    margin-top: 24px;
+    margin-bottom: 8px;
+
+    border: 1px solid #292929;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+/* =========================================
+   START SCREEN
+========================================= */
+
+.start-screen {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.start-screen.hidden {
+    display: none;
+}
+
+.start-screen h2 {
+    color: #39ff14;
+
+    font-size: clamp(28px, 4vw, 42px);
+
+    letter-spacing: 2px;
+
+    margin-bottom: 20px;
+}
+
+.start-screen p {
+    color: #777777;
+
+    font-size: 11px;
+
+    line-height: 2;
+
+    margin-bottom: 20px;
+}
+
+.start-button {
+    min-width: 170px;
+
+    height: 52px;
+
+    background: transparent;
+
+    border: 1px solid #39ff14;
+
+    color: #39ff14;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.start-button:hover {
+    background: #39ff14;
+    color: #000000;
+}
+
+/* =========================================
+   GAME AREA
+========================================= */
+
+.game-area {
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.game-area.active {
+    display: flex;
+}
+
+/* =========================================
+   GAME CONTROLS
+========================================= */
+
+.game-controls {
+    width: min(520px, 75%);
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.move-info {
+    color: #555555;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+.new-game-button {
+    height: 34px;
+
+    padding: 0 15px;
+
+    background: transparent;
+
+    border: 1px solid #333333;
+
+    color: #aaaaaa;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.new-game-button:hover {
+    color: #39ff14;
+    border-color: #39ff14;
+}
+
+/* =========================================
+   2048 BOARD
+========================================= */
+
+.board {
+    width: min(
+        500px,
+        calc(100vh - 255px),
+        70vw
+    );
+
+    height: min(
+        500px,
+        calc(100vh - 255px),
+        70vw
+    );
+
+    padding: 7px;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+
+    gap: 7px;
+
+    border: 1px solid #303030;
+
+    background: #080808;
+
+    flex-shrink: 1;
+}
+
+/* =========================================
+   TILES
+========================================= */
+
+.tile {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #0d0d0d;
+
+    border: 1px solid #202020;
+
+    color: #ffffff;
+
+    font-size: clamp(
+        24px,
+        4vw,
+        44px
+    );
+
+    font-weight: bold;
+
+    user-select: none;
+
+    transition:
+        transform .12s ease,
+        border-color .12s ease,
+        background .12s ease;
+}
+
+.tile[data-value="2"] {
+    background: #111111;
+    border-color: #353535;
+}
+
+.tile[data-value="4"] {
+    background: #151515;
+    border-color: #444444;
+}
+
+.tile[data-value="8"] {
+    background: #1b1b1b;
+    border-color: #555555;
+}
+
+.tile[data-value="16"] {
+    background: #222222;
+    border-color: #666666;
+}
+
+.tile[data-value="32"] {
+    background: #292929;
+    border-color: #777777;
+}
+
+.tile[data-value="64"] {
+    background: #303030;
+    border-color: #888888;
+}
+
+.tile[data-value="128"] {
+    background: #181818;
+
+    border-color: #aaaaaa;
+
+    box-shadow:
+        0 0 10px rgba(255,255,255,.12);
+
+    font-size: clamp(20px, 3vw, 36px);
+}
+
+.tile[data-value="256"] {
+    background: #202020;
+
+    border-color: #cccccc;
+
+    box-shadow:
+        0 0 14px rgba(255,255,255,.18);
+
+    font-size: clamp(20px, 3vw, 36px);
+}
+
+.tile[data-value="512"] {
+    background: #292929;
+
+    border-color: #ffffff;
+
+    box-shadow:
+        0 0 18px rgba(255,255,255,.25);
+
+    font-size: clamp(20px, 3vw, 36px);
+}
+
+.tile[data-value="1024"] {
+    background: #ffffff;
+
+    color: #000000;
+
+    border-color: #ffffff;
+
+    box-shadow:
+        0 0 20px rgba(255,255,255,.35);
+
+    font-size: clamp(18px, 2.5vw, 30px);
+}
+
+.tile[data-value="2048"] {
+    background: #39ff14;
+
+    color: #000000;
+
+    border-color: #39ff14;
+
+    box-shadow:
+        0 0 30px rgba(57,255,20,.55);
+
+    font-size: clamp(18px, 2.5vw, 30px);
+}
+
+/* =========================================
+   GAME OVER
+========================================= */
+
+.game-over {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,0,0,.88);
+
+    z-index: 20;
+}
+
+.game-over.active {
+    display: flex;
+}
+
+.game-over-box {
+    text-align: center;
+}
+
+.game-over-box h2 {
+    color: #39ff14;
+
+    font-size: 38px;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 15px;
+}
+
+.game-over-box p {
+    color: #777777;
+
+    font-size: 11px;
+
+    margin-bottom: 24px;
+}
+
+.retry-button {
+    height: 48px;
+
+    min-width: 145px;
+
+    background: transparent;
+
+    border: 1px solid #39ff14;
+
+    color: #39ff14;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.retry-button:hover {
+    background: #39ff14;
+    color: #000000;
+}
+
+/* =========================================
+   WIN
+========================================= */
+
+.win-message {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    display: none;
+
+    z-index: 30;
+
+    text-align: center;
+
+    padding: 30px 45px;
+
+    border: 1px solid #39ff14;
+
+    background: rgba(0,0,0,.94);
+}
+
+.win-message.active {
+    display: block;
+}
+
+.win-message h2 {
+    color: #39ff14;
+
+    font-size: 32px;
+
+    margin-bottom: 12px;
+}
+
+.win-message p {
+    color: #777777;
+
+    font-size: 10px;
+
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   FLOATING SCORE
+========================================= */
+
+.floating-score {
+    position: fixed;
+
+    pointer-events: none;
+
+    z-index: 1000;
+
+    color: #39ff14;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    animation:
+        scoreFloat .7s ease-out forwards;
+}
+
+@keyframes scoreFloat {
+
+    0% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-42px);
+    }
+
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer-text {
+    flex: 0 0 auto;
+
+    text-align: center;
+
+    color: #555555;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    height: 18px;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .game-page {
+        width: calc(100% - 24px);
+    }
+
+    .top-header {
+        grid-template-columns:
+            130px
+            1fr
+            auto;
+    }
+
+    .stat-box {
+        width: 65px;
+    }
+
+}
+
+/* =========================================
+   SMALL SCREEN
+========================================= */
+
+@media (max-width: 700px) {
+
+    body {
+        overflow-y: auto;
+    }
+
+    .game-page {
+
+        width: calc(100% - 20px);
+
+        height: auto;
+
+        min-height: 100vh;
+
+        padding-top: 20px;
+
+    }
+
+    .top-header {
+
+        height: auto;
+
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+
+        padding-bottom: 18px;
+
+    }
+
+    .back-button {
+        margin: auto;
+    }
+
+    .game-title {
+        order: -1;
+    }
+
+    .stats {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .game-container {
+
+        height: calc(
+            100vh - 240px
+        );
+
+        min-height: 500px;
+
+        margin-top: 18px;
+
+    }
+
+    .game-controls {
+
+        width: 88%;
+
+    }
+
+    .board {
+
+        width: min(
+            88vw,
+            500px
+        );
+
+        height: min(
+            88vw,
+            500px
+        );
+
+    }
+
+}
+
+/* =========================================
+   VERY SMALL
+========================================= */
+
+@media (max-width: 450px) {
+
+    .game-container {
+        min-height: 450px;
+    }
+
+    .board {
+
+        width: 88vw;
+
+        height: 88vw;
+
+        gap: 4px;
+
+        padding: 5px;
+
+    }
+
+    .tile {
+        font-size: 22px;
+    }
+
+    .stat-box {
+        width: 60px;
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="game-page">
+
+
+    <!-- ==================================================
+         HEADER
+         ================================================== -->
+
+    <header class="top-header">
+
+
+        <a
+            href="../../index.html"
+            class="back-button"
+        >
+            ← ANA SAYFA
+        </a>
+
+
+        <div class="game-title">
+
+            <h1>
+                2048
+                <span>///</span>
+            </h1>
+
+            <p>
+                MERGE • THINK • REACH 2048
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+
+            <div class="stat-box">
+
+                <span>SCORE</span>
+
+                <strong id="score">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <span>BEST</span>
+
+                <strong id="best">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <span>MOVES</span>
+
+                <strong id="moves">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <span>MERGES</span>
+
+                <strong id="merges">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         GAME CONTAINER
+         ================================================== -->
+
+    <section class="game-container">
+
+
+        <!-- ==================================================
+             ONLY INITIAL PLAY SCREEN
+             ================================================== -->
+
+        <div
+            id="startScreen"
+            class="start-screen"
+        >
+
+            <h2>
+                2048
+            </h2>
+
+            <p>
+                MERGE THE NUMBERS<br>
+                AND REACH 2048.
+            </p>
+
+            <button
+                id="startButton"
+                class="start-button"
+            >
+                START GAME
+            </button>
+
+        </div>
+
+
+        <!-- ==================================================
+             GAME
+             ================================================== -->
+
+        <div
+            id="gameArea"
+            class="game-area"
+        >
+
+
+            <div class="game-controls">
+
+
+                <span class="move-info">
+                    USE ARROW KEYS TO MOVE
+                </span>
+
+
+                <button
+                    id="newGameButton"
+                    class="new-game-button"
+                >
+                    NEW GAME
+                </button>
+
+
+            </div>
+
+
+            <div
+                id="board"
+                class="board"
+            ></div>
+
+
+        </div>
+
+
+        <!-- ==================================================
+             GAME OVER
+             ================================================== -->
+
+        <div
+            id="gameOver"
+            class="game-over"
+        >
+
+            <div class="game-over-box">
+
+                <h2>
+                    GAME OVER
+                </h2>
+
+                <p id="gameOverText">
+                    NO MORE MOVES
+                </p>
+
+                <button
+                    id="retryButton"
+                    class="retry-button"
+                >
+                    TRY AGAIN
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             WIN
+             ================================================== -->
+
+        <div
+            id="winMessage"
+            class="win-message"
+        >
+
+            <h2>
+                2048!
+            </h2>
+
+            <p>
+                TARGET REACHED
+            </p>
+
+            <button
+                id="continueButton"
+                class="retry-button"
+            >
+                CONTINUE
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+    <div class="footer-text">
+        SCORE • STRATEGY • PRECISION
+    </div>
+
+
+</main>
+
+
+<script src="2048.js"></script>
+
+</body>
+
+</html>
