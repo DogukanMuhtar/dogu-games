@@ -560,4 +560,386 @@ footer {
         text-align: center;
     }
 
+    /* =========================================================
+   MEMORY GAME
+   ========================================================= */
+
+.memory-wrapper {
+    min-height: 100vh;
+    background: #050505;
+    color: #f5f5dc;
+    font-family: "Courier New", monospace;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+
+/* ============================
+   HEADER
+   ============================ */
+
+.memory-header {
+    max-width: 900px;
+    margin: 0 auto 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 2px solid #222;
+    padding-bottom: 20px;
+}
+
+
+.memory-header h1 {
+    margin: 0;
+
+    color: #39ff14;
+
+    font-size: 32px;
+    letter-spacing: 5px;
+
+    text-shadow:
+        3px 3px 0 #123d0b;
+}
+
+
+.back-btn {
+    color: #f5f5dc;
+    text-decoration: none;
+
+    font-size: 12px;
+    letter-spacing: 1px;
+
+    border: 2px solid #333;
+
+    padding: 10px 14px;
+
+    transition: 0.15s;
+}
+
+
+.back-btn:hover {
+    color: #39ff14;
+    border-color: #39ff14;
+}
+
+
+/* ============================
+   STATS
+   ============================ */
+
+.memory-stats {
+    display: flex;
+    gap: 25px;
+
+    font-size: 10px;
+    text-align: center;
+}
+
+
+.memory-stats div {
+    border: 2px solid #333;
+
+    min-width: 70px;
+
+    padding: 8px;
+}
+
+
+.memory-stats span {
+    display: block;
+
+    color: #39ff14;
+
+    font-size: 16px;
+
+    margin-top: 5px;
+}
+
+
+/* ============================
+   MEMORY BOARD
+   ============================ */
+
+.memory-board {
+    width: min(90vw, 600px);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    perspective: 800px;
+}
+
+
+/* ============================
+   MEMORY CARD
+   ============================ */
+
+.memory-card {
+
+    position: relative;
+
+    aspect-ratio: 1 / 1;
+
+    border: 2px solid #333;
+
+    background: #101010;
+
+    color: #39ff14;
+
+    padding: 0;
+
+    cursor: pointer;
+
+    font-family: "Courier New", monospace;
+
+    font-size: clamp(24px, 6vw, 42px);
+
+    font-weight: bold;
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform 0.25s,
+        border-color 0.15s,
+        box-shadow 0.15s;
+
+}
+
+
+/* ============================
+   CARD HOVER
+   ============================ */
+
+.memory-card:hover {
+
+    border-color: #39ff14;
+
+    box-shadow:
+        0 0 0 2px #123d0b;
+
+}
+
+
+/* ============================
+   CARD SIDES
+   ============================ */
+
+.card-front,
+.card-back {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    backface-visibility: hidden;
+
+}
+
+
+/* ============================
+   CARD FRONT
+   ============================ */
+
+.card-front {
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            #0b0b0b,
+            #0b0b0b 4px,
+            #111 4px,
+            #111 8px
+        );
+
+    color: #39ff14;
+
+}
+
+
+/* ============================
+   CARD BACK
+   ============================ */
+
+.card-back {
+
+    background: #39ff14;
+
+    color: #050505;
+
+    transform: rotateY(180deg);
+
+}
+
+
+/* ============================
+   FLIPPED CARD
+   ============================ */
+
+.memory-card.flipped {
+
+    transform: rotateY(180deg);
+
+}
+
+
+/* ============================
+   MATCHED CARD
+   ============================ */
+
+.memory-card.matched {
+
+    border-color: #39ff14;
+
+    box-shadow:
+        0 0 10px rgba(57, 255, 20, 0.35);
+
+    cursor: default;
+
+}
+
+
+/* ============================
+   CONTROLS
+   ============================ */
+
+.memory-controls {
+
+    max-width: 600px;
+
+    margin: 30px auto 0;
+
+    text-align: center;
+
+}
+
+
+.memory-controls p {
+
+    color: #777;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.memory-btn {
+
+    background: #050505;
+
+    color: #39ff14;
+
+    border: 2px solid #39ff14;
+
+    padding: 12px 24px;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+
+}
+
+
+.memory-btn:hover {
+
+    background: #39ff14;
+
+    color: #050505;
+
+}
+
+
+/* ============================
+   MOBILE
+   ============================ */
+
+@media (max-width: 600px) {
+
+    .memory-wrapper {
+        padding: 15px;
+    }
+
+
+    .memory-header {
+
+        flex-wrap: wrap;
+
+        gap: 15px;
+
+        margin-bottom: 25px;
+
+    }
+
+
+    .memory-header h1 {
+
+        order: -1;
+
+        width: 100%;
+
+        text-align: center;
+
+        font-size: 26px;
+
+    }
+
+
+    .memory-stats {
+
+        gap: 8px;
+
+    }
+
+
+    .memory-stats div {
+
+        min-width: 60px;
+
+        padding: 6px;
+
+    }
+
+
+    .memory-board {
+
+        gap: 7px;
+
+    }
+
+
+    .memory-card {
+
+        border-width: 2px;
+
+    }
+
+}
+
+
+
 }
