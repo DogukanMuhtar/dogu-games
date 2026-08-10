@@ -26,8 +26,8 @@ let gameLoop;
 
 let gameSpeed = 150;
 
-const MIN_GAME_SPEED = 60;
-const SPEED_INCREASE = 5;
+const MIN_GAME_SPEED = 100;
+const SPEED_INCREASE = 1;
 
 let highScore =
     Number(localStorage.getItem("snakeHighScore")) || 0;
