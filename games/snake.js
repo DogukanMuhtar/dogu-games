@@ -92,7 +92,7 @@ function startGame() {
     clearInterval(gameLoop);
 
 
-    // Oyunu hemen ekrana çiz
+    // Oyunu hemen çiz
     drawGame();
 
 
@@ -240,18 +240,14 @@ function drawGame() {
 
 
     // ============================
-    // YEM
+    // ELMA
     // ============================
 
     if (food) {
 
-        ctx.fillStyle = "#ff1744";
-
-        ctx.fillRect(
+        drawApple(
             food.x * gridSize,
-            food.y * gridSize,
-            gridSize - 1,
-            gridSize - 1
+            food.y * gridSize
         );
 
     }
@@ -265,31 +261,289 @@ function drawGame() {
 
         snake.forEach((part, index) => {
 
-            // Snake kafası
+            const x = part.x * gridSize;
+            const y = part.y * gridSize;
+
+
+            // ========================
+            // KAFA
+            // ========================
+
             if (index === 0) {
 
-                ctx.fillStyle = "#39ff14";
+                drawSnakeHead(x, y);
 
             }
 
-            // Snake gövdesi
+
+            // ========================
+            // GÖVDE
+            // ========================
+
             else {
 
-                ctx.fillStyle = "#22c55e";
+                drawSnakeBody(x, y);
 
             }
-
-
-            ctx.fillRect(
-                part.x * gridSize,
-                part.y * gridSize,
-                gridSize - 1,
-                gridSize - 1
-            );
 
         });
 
     }
+
+}
+
+
+// ============================
+// DRAW SNAKE HEAD
+// ============================
+
+function drawSnakeHead(x, y) {
+
+    // Kafa
+    ctx.fillStyle = "#39ff14";
+
+    ctx.fillRect(
+        x + 1,
+        y + 1,
+        gridSize - 2,
+        gridSize - 2
+    );
+
+
+    // Kafa için hafif koyu alt bölüm
+    ctx.fillStyle = "#22c55e";
+
+    ctx.fillRect(
+        x + 2,
+        y + 14,
+        gridSize - 4,
+        4
+    );
+
+
+    // Gözler
+    ctx.fillStyle = "#050505";
+
+
+    const eyeSize = 4;
+
+
+    // ============================
+    // SAĞA GİDİYOR
+    // ============================
+
+    if (direction.x === 1) {
+
+        ctx.fillRect(
+            x + 13,
+            y + 4,
+            eyeSize,
+            eyeSize
+        );
+
+        ctx.fillRect(
+            x + 13,
+            y + 12,
+            eyeSize,
+            eyeSize
+        );
+
+    }
+
+
+    // ============================
+    // SOLA GİDİYOR
+    // ============================
+
+    else if (direction.x === -1) {
+
+        ctx.fillRect(
+            x + 3,
+            y + 4,
+            eyeSize,
+            eyeSize
+        );
+
+        ctx.fillRect(
+            x + 3,
+            y + 12,
+            eyeSize,
+            eyeSize
+        );
+
+    }
+
+
+    // ============================
+    // AŞAĞI GİDİYOR
+    // ============================
+
+    else if (direction.y === 1) {
+
+        ctx.fillRect(
+            x + 4,
+            y + 13,
+            eyeSize,
+            eyeSize
+        );
+
+        ctx.fillRect(
+            x + 12,
+            y + 13,
+            eyeSize,
+            eyeSize
+        );
+
+    }
+
+
+    // ============================
+    // YUKARI GİDİYOR
+    // ============================
+
+    else {
+
+        ctx.fillRect(
+            x + 4,
+            y + 3,
+            eyeSize,
+            eyeSize
+        );
+
+        ctx.fillRect(
+            x + 12,
+            y + 3,
+            eyeSize,
+            eyeSize
+        );
+
+    }
+
+}
+
+
+// ============================
+// DRAW SNAKE BODY
+// ============================
+
+function drawSnakeBody(x, y) {
+
+    // Ana gövde
+    ctx.fillStyle = "#22c55e";
+
+    ctx.fillRect(
+        x + 1,
+        y + 1,
+        gridSize - 2,
+        gridSize - 2
+    );
+
+
+    // Parlak pixel
+    ctx.fillStyle = "#39ff14";
+
+    ctx.fillRect(
+        x + 3,
+        y + 3,
+        4,
+        4
+    );
+
+
+    // Koyu pixel
+    ctx.fillStyle = "#16803c";
+
+    ctx.fillRect(
+        x + 13,
+        y + 13,
+        4,
+        4
+    );
+
+}
+
+
+// ============================
+// DRAW APPLE
+// ============================
+
+function drawApple(x, y) {
+
+    // ============================
+    // ELMA GÖVDESİ
+    // ============================
+
+    ctx.fillStyle = "#ff1744";
+
+    ctx.fillRect(
+        x + 4,
+        y + 5,
+        12,
+        11
+    );
+
+    ctx.fillRect(
+        x + 2,
+        y + 8,
+        16,
+        7
+    );
+
+
+    // ============================
+    // ELMA GÖLGESİ
+    // ============================
+
+    ctx.fillStyle = "#c4002f";
+
+    ctx.fillRect(
+        x + 4,
+        y + 13,
+        12,
+        3
+    );
+
+
+    // ============================
+    // PARLAK PIXEL
+    // ============================
+
+    ctx.fillStyle = "#ff6b81";
+
+    ctx.fillRect(
+        x + 5,
+        y + 6,
+        4,
+        4
+    );
+
+
+    // ============================
+    // SAP
+    // ============================
+
+    ctx.fillStyle = "#8b4513";
+
+    ctx.fillRect(
+        x + 10,
+        y + 1,
+        3,
+        5
+    );
+
+
+    // ============================
+    // YAPRAK
+    // ============================
+
+    ctx.fillStyle = "#39ff14";
+
+    ctx.fillRect(
+        x + 13,
+        y + 2,
+        4,
+        3
+    );
 
 }
 
