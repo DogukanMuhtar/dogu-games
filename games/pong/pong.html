@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>PONG /// DOĞU GAMES</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+
+            background: #050505;
+
+            color: #ffffff;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            overflow: hidden;
+
+        }
+
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        .game-page {
+
+            width:
+                min(
+                    1290px,
+                    calc(100% - 40px)
+                );
+
+            height: 100vh;
+
+            margin: 0 auto;
+
+            padding-top: 34px;
+            padding-bottom: 18px;
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .top-header {
+
+            flex: 0 0 auto;
+
+            height: 90px;
+
+            display: grid;
+
+            grid-template-columns:
+                180px
+                1fr
+                auto;
+
+            align-items: start;
+
+            border-bottom:
+                1px solid #292929;
+
+            padding-bottom: 25px;
+
+        }
+
+
+        /* =========================================
+           BACK
+        ========================================= */
+
+        .back-button {
+
+            width: 126px;
+            height: 49px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid #353535;
+
+            color: #ffffff;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            transition: .2s;
+
+        }
+
+
+        .back-button:hover {
+
+            border-color:
+                #39ff14;
+
+            color:
+                #39ff14;
+
+        }
+
+
+        /* =========================================
+           TITLE
+        ========================================= */
+
+        .game-title {
+
+            text-align: center;
+
+            padding-top: 0;
+
+        }
+
+
+        .game-title h1 {
+
+            font-size:
+                clamp(
+                    38px,
+                    4vw,
+                    56px
+                );
+
+            line-height: .95;
+
+            letter-spacing: 4px;
+
+            font-weight: 900;
+
+            color: #f2f0e5;
+
+        }
+
+
+        .game-title h1 span {
+
+            color:
+                #39ff14;
+
+            margin-left: 10px;
+
+            letter-spacing: 5px;
+
+        }
+
+
+        .game-title p {
+
+            margin-top: 8px;
+
+            color: #666666;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        /* =========================================
+           STATS
+        ========================================= */
+
+        .stats {
+
+            display: flex;
+
+            gap: 6px;
+
+        }
+
+
+        .stat-box {
+
+            width: 78px;
+            height: 54px;
+
+            border:
+                1px solid #303030;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: #060606;
+
+        }
+
+
+        .stat-box span {
+
+            color:
+                #777777;
+
+            font-size: 8px;
+
+            margin-bottom: 5px;
+
+            font-weight: bold;
+
+        }
+
+
+        .stat-box strong {
+
+            color:
+                #39ff14;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================================
+           GAME CONTAINER
+        ========================================= */
+
+        .game-container {
+
+            flex: 1;
+
+            min-height: 0;
+
+            margin-top: 24px;
+
+            margin-bottom: 8px;
+
+            border:
+                1px solid #292929;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            overflow: hidden;
+
+        }
+
+
+        /* =========================================
+           START SCREEN
+        ========================================= */
+
+        .start-screen {
+
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+        }
+
+
+        .start-screen.hidden {
+
+            display: none;
+
+        }
+
+
+        .start-screen h2 {
+
+            color:
+                #39ff14;
+
+            font-size:
+                clamp(
+                    30px,
+                    4vw,
+                    44px
+                );
+
+            letter-spacing: 4px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .start-screen p {
+
+            color:
+                #777777;
+
+            font-size: 11px;
+
+            line-height: 2;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .start-button {
+
+            min-width: 170px;
+
+            height: 52px;
+
+            background:
+                transparent;
+
+            border:
+                1px solid #39ff14;
+
+            color:
+                #39ff14;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+        }
+
+
+        .start-button:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #000000;
+
+        }
+
+
+        /* =========================================
+           GAME AREA
+        ========================================= */
+
+        .game-area {
+
+            width: 100%;
+            height: 100%;
+
+            display: none;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        .game-area.active {
+
+            display: flex;
+
+        }
+
+
+        /* =========================================
+           GAME TOP
+        ========================================= */
+
+        .game-controls {
+
+            width:
+                min(
+                    850px,
+                    90%
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .control-info {
+
+            color:
+                #555555;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+
+        }
+
+
+        .new-game-button {
+
+            height: 34px;
+
+            padding:
+                0 16px;
+
+            background:
+                transparent;
+
+            border:
+                1px solid #333333;
+
+            color:
+                #aaaaaa;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 9px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: .2s;
+
+        }
+
+
+        .new-game-button:hover {
+
+            color:
+                #39ff14;
+
+            border-color:
+                #39ff14;
+
+        }
+
+
+        /* =========================================
+           PONG CANVAS
+        ========================================= */
+
+        .pong-wrapper {
+
+            width:
+                min(
+                    850px,
+                    90%
+                );
+
+            height:
+                min(
+                    480px,
+                    calc(100vh - 245px)
+                );
+
+            min-height: 300px;
+
+            border:
+                1px solid #303030;
+
+            background:
+                #020202;
+
+            position: relative;
+
+        }
+
+
+        canvas {
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+        }
+
+
+        /* =========================================
+           MOBILE CONTROLS
+        ========================================= */
+
+        .mobile-controls {
+
+            display: none;
+
+            margin-top: 12px;
+
+            gap: 8px;
+
+        }
+
+
+        .mobile-button {
+
+            width: 80px;
+            height: 40px;
+
+            background:
+                #080808;
+
+            border:
+                1px solid #333333;
+
+            color:
+                #aaaaaa;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+        }
+
+
+        .mobile-button:active {
+
+            background:
+                #39ff14;
+
+            color:
+                #000000;
+
+        }
+
+
+        /* =========================================
+           GAME OVER
+        ========================================= */
+
+        .game-over {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    .9
+                );
+
+            z-index: 20;
+
+        }
+
+
+        .game-over.active {
+
+            display: flex;
+
+        }
+
+
+        .game-over-box {
+
+            text-align: center;
+
+        }
+
+
+        .game-over-box h2 {
+
+            color:
+                #39ff14;
+
+            font-size:
+                clamp(
+                    30px,
+                    5vw,
+                    46px
+                );
+
+            letter-spacing: 3px;
+
+            margin-bottom: 14px;
+
+        }
+
+
+        .game-over-box p {
+
+            color:
+                #777777;
+
+            font-size: 11px;
+
+            line-height: 2;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .retry-button {
+
+            height: 48px;
+
+            min-width: 145px;
+
+            background:
+                transparent;
+
+            border:
+                1px solid #39ff14;
+
+            color:
+                #39ff14;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        .retry-button:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #000000;
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer-text {
+
+            flex:
+                0 0 auto;
+
+            text-align:
+                center;
+
+            color:
+                #555555;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+
+            height: 18px;
+
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (
+            max-width: 900px
+        ) {
+
+            .game-page {
+
+                width:
+                    calc(100% - 24px);
+
+            }
+
+
+            .top-header {
+
+                grid-template-columns:
+                    130px
+                    1fr
+                    auto;
+
+            }
+
+
+            .stat-box {
+
+                width: 65px;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 700px
+        ) {
+
+            body {
+
+                overflow-y:
+                    auto;
+
+            }
+
+
+            .game-page {
+
+                width:
+                    calc(100% - 20px);
+
+                height:
+                    auto;
+
+                min-height:
+                    100vh;
+
+                padding-top:
+                    20px;
+
+            }
+
+
+            .top-header {
+
+                height:
+                    auto;
+
+                grid-template-columns:
+                    1fr;
+
+                gap: 15px;
+
+                padding-bottom:
+                    18px;
+
+            }
+
+
+            .back-button {
+
+                margin:
+                    auto;
+
+            }
+
+
+            .game-title {
+
+                order:
+                    -1;
+
+            }
+
+
+            .stats {
+
+                justify-content:
+                    center;
+
+                flex-wrap:
+                    wrap;
+
+            }
+
+
+            .game-container {
+
+                height:
+                    calc(
+                        100vh - 240px
+                    );
+
+                min-height:
+                    500px;
+
+                margin-top:
+                    18px;
+
+            }
+
+
+            .game-controls {
+
+                width:
+                    92%;
+
+            }
+
+
+            .pong-wrapper {
+
+                width:
+                    92%;
+
+                height:
+                    calc(
+                        100vw * .55
+                    );
+
+                min-height:
+                    250px;
+
+            }
+
+
+            .mobile-controls {
+
+                display:
+                    flex;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 450px
+        ) {
+
+            .stat-box {
+
+                width:
+                    60px;
+
+            }
+
+
+            .pong-wrapper {
+
+                width:
+                    94%;
+
+                height:
+                    52vw;
+
+                min-height:
+                    220px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="game-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="top-header">
+
+
+        <a
+            href="../../index.html"
+            class="back-button"
+        >
+            ← ANA SAYFA
+        </a>
+
+
+        <div class="game-title">
+
+            <h1>
+
+                PONG
+
+                <span>///</span>
+
+            </h1>
+
+
+            <p>
+                CLASSIC ARCADE PONG
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+
+            <div class="stat-box">
+
+                <span>PLAYER 1</span>
+
+                <strong id="playerScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <span>PLAYER 2</span>
+
+                <strong id="cpuScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <span>BEST</span>
+
+                <strong id="bestScore">
+                    0
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         GAME
+    ========================================== -->
+
+    <section class="game-container">
+
+
+        <!-- START -->
+
+        <div
+            id="startScreen"
+            class="start-screen"
+        >
+
+            <h2>
+                PONG
+            </h2>
+
+
+            <p>
+
+                PLAYER 1 VS PLAYER 2<br>
+                FIRST TO 7 WINS.
+
+            </p>
+
+
+            <button
+                id="startButton"
+                class="start-button"
+            >
+
+                START GAME
+
+            </button>
+
+        </div>
+
+
+        <!-- GAME AREA -->
+
+        <div
+            id="gameArea"
+            class="game-area"
+        >
+
+
+            <div class="game-controls">
+
+
+                <span class="control-info">
+
+                    P1: W / S &nbsp;&nbsp; P2: ↑ / ↓
+
+                </span>
+
+
+                <button
+                    id="newGameButton"
+                    class="new-game-button"
+                >
+
+                    NEW GAME
+
+                </button>
+
+
+            </div>
+
+
+            <div class="pong-wrapper">
+
+                <canvas
+                    id="pongCanvas"
+                ></canvas>
+
+
+                <!-- GAME OVER -->
+
+                <div
+                    id="gameOver"
+                    class="game-over"
+                >
+
+                    <div
+                        class="game-over-box"
+                    >
+
+                        <h2
+                            id="gameOverTitle"
+                        >
+                            GAME OVER
+                        </h2>
+
+
+                        <p
+                            id="gameOverText"
+                        >
+                            FINAL SCORE
+                        </p>
+
+
+                        <button
+                            id="retryButton"
+                            class="retry-button"
+                        >
+
+                            PLAY AGAIN
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MOBILE -->
+
+            <div class="mobile-controls">
+
+                <button
+                    id="upButton"
+                    class="mobile-button"
+                >
+                    ▲ UP
+                </button>
+
+
+                <button
+                    id="downButton"
+                    class="mobile-button"
+                >
+                    ▼ DOWN
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+    <div class="footer-text">
+
+        SPEED • REFLEX • PRECISION
+
+    </div>
+
+
+</main>
+
+
+<script src="pong.js"></script>
+
+</body>
+
+</html>

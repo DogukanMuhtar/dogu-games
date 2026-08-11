@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#050505"
+    >
+
+    <title>NEEDLE | Doğu Games</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            width: 100%;
+            min-height: 100%;
+
+            background: #050505;
+
+            color: #f5f5dc;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            overflow: hidden;
+
+            user-select: none;
+            -webkit-user-select: none;
+
+            touch-action: none;
+
+            -webkit-tap-highlight-color: transparent;
+
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           CANVAS
+        ===================================================== */
+
+        canvas {
+
+            display: block;
+
+            position: fixed;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            z-index: 1;
+
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .game-wrapper {
+
+            position: fixed;
+
+            top: 0;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: min(1070px, calc(100% - 40px));
+
+            z-index: 20;
+
+            pointer-events: none;
+
+        }
+
+
+        .game-header {
+
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                auto
+                1fr;
+
+            align-items: center;
+
+            gap: 25px;
+
+            padding:
+
+                30px
+                0
+                22px;
+
+            border-bottom:
+                2px solid
+                #292929;
+
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-btn {
+
+            justify-self: start;
+
+            display: inline-block;
+
+            padding:
+                10px 14px;
+
+            border:
+                1px solid
+                #39ff14;
+
+            background:
+                #050505;
+
+            color:
+                #39ff14;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            pointer-events: auto;
+
+            transition:
+                0.15s;
+
+        }
+
+
+        .back-btn:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #050505;
+
+        }
+
+
+        .back-btn:visited {
+
+            color:
+                #39ff14;
+
+        }
+
+
+        .back-btn:visited:hover {
+
+            color:
+                #050505;
+
+        }
+
+
+        /* =====================================================
+           TITLE
+        ===================================================== */
+
+        .game-title {
+
+            margin: 0;
+
+            text-align: center;
+
+            white-space: nowrap;
+
+            font-size: 30px;
+
+            letter-spacing: 5px;
+
+            color:
+                #f5f5dc;
+
+            text-shadow:
+                3px 3px 0
+                #151515;
+
+        }
+
+
+        .game-title span {
+
+            color:
+                #39ff14;
+
+        }
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .game-stats {
+
+            justify-self: end;
+
+            display: flex;
+
+            gap: 8px;
+
+        }
+
+
+        .stat {
+
+            min-width: 70px;
+
+            padding:
+                8px 10px;
+
+            border:
+                2px solid
+                #333;
+
+            background:
+                rgba(
+                    5,
+                    5,
+                    5,
+                    0.9
+                );
+
+            text-align: center;
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .stat-value {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color:
+                #39ff14;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =====================================================
+           GAME AREA
+        ===================================================== */
+
+        .game-area {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 5;
+
+            pointer-events: none;
+
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        #msg {
+
+            position: fixed;
+
+            left: 50%;
+
+            bottom:
+                55px;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 30;
+
+            color:
+                rgba(
+                    245,
+                    245,
+                    220,
+                    0.45
+                );
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            font-size:
+                11px;
+
+            font-weight: bold;
+
+            letter-spacing: 3px;
+
+            white-space: nowrap;
+
+            pointer-events: none;
+
+            opacity: 0;
+
+            transition:
+                opacity
+                0.25s
+                ease;
+
+        }
+
+
+        #msg.show {
+
+            opacity: 1;
+
+        }
+
+
+        /* =====================================================
+           RESTART BUTTON
+        ===================================================== */
+
+        #restart-btn {
+
+            position: fixed;
+
+            left: 50%;
+
+            bottom:
+                22px;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 30;
+
+            padding:
+                11px 24px;
+
+            border:
+                2px solid
+                #39ff14;
+
+            background:
+                #050505;
+
+            color:
+                #39ff14;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            font-size:
+                11px;
+
+            font-weight:
+                bold;
+
+            letter-spacing:
+                1px;
+
+            cursor:
+                pointer;
+
+            pointer-events:
+                auto;
+
+            display:
+                none;
+
+        }
+
+
+        #restart-btn:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #050505;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 700px) {
+
+            .game-wrapper {
+
+                width:
+                    calc(
+                        100% - 24px
+                    );
+
+            }
+
+
+            .game-header {
+
+                grid-template-columns:
+                    1fr;
+
+                justify-items:
+                    center;
+
+                gap:
+                    15px;
+
+                padding:
+                    18px
+                    0
+                    18px;
+
+            }
+
+
+            .back-btn {
+
+                justify-self:
+                    center;
+
+            }
+
+
+            .game-title {
+
+                order:
+                    -1;
+
+                font-size:
+                    25px;
+
+                letter-spacing:
+                    4px;
+
+            }
+
+
+            .game-stats {
+
+                justify-self:
+                    center;
+
+            }
+
+
+            .stat {
+
+                min-width:
+                    65px;
+
+                padding:
+                    7px 8px;
+
+            }
+
+
+            .stat-value {
+
+                font-size:
+                    15px;
+
+            }
+
+
+            #msg {
+
+                bottom:
+                    45px;
+
+                font-size:
+                    10px;
+
+                letter-spacing:
+                    2px;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           VERY SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 420px) {
+
+            .game-title {
+
+                font-size:
+                    21px;
+
+                letter-spacing:
+                    3px;
+
+            }
+
+
+            .game-stats {
+
+                gap:
+                    5px;
+
+            }
+
+
+            .stat {
+
+                min-width:
+                    58px;
+
+                font-size:
+                    8px;
+
+            }
+
+
+            .stat-value {
+
+                font-size:
+                    14px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         OYUN CANVAS
+    ====================================================== -->
+
+    <canvas id="c"></canvas>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="game-wrapper">
+
+        <header class="game-header">
+
+
+            <!-- ANA SAYFA -->
+
+            <a
+                href="../../index.html"
+                class="back-btn"
+            >
+                ← ANA SAYFA
+            </a>
+
+
+            <!-- BAŞLIK -->
+
+            <h1 class="game-title">
+
+                NEEDLE
+
+                <span>
+                    ///
+                </span>
+
+            </h1>
+
+
+            <!-- SKORLAR -->
+
+            <div class="game-stats">
+
+
+                <div class="stat">
+
+                    SCORE
+
+                    <span
+                        class="stat-value"
+                        id="score"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="stat">
+
+                    BEST
+
+                    <span
+                        class="stat-value"
+                        id="best"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+    </div>
+
+
+    <!-- =====================================================
+         MESAJ
+    ====================================================== -->
+
+    <div
+        id="msg"
+        class="show"
+    >
+        TAP TO FIRE
+    </div>
+
+
+    <!-- =====================================================
+         RESTART
+    ====================================================== -->
+
+    <button
+        id="restart-btn"
+        type="button"
+    >
+        RESTART
+    </button>
+
+
+    <!-- =====================================================
+         SUPABASE
+    ====================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- =====================================================
+         OYUN JS
+    ====================================================== -->
+
+    <script src="needle.js"></script>
+
+
+</body>
+
+</html>

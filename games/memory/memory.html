@@ -102,6 +102,10 @@
         }
 
 
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
         .back-btn {
 
             justify-self: start;
@@ -111,31 +115,58 @@
             padding: 10px 14px;
 
             border:
-                2px solid #333;
+                1px solid #39ff14;
 
-            color: #f5f5dc;
+            color: #39ff14;
+
+            background: #050505;
 
             text-decoration: none;
 
             font-size: 11px;
 
+            font-weight: bold;
+
             letter-spacing: 1px;
 
-            transition:
-                0.15s;
+            transition: 0.15s;
 
         }
 
 
         .back-btn:hover {
 
-            color: #39ff14;
+            color: #050505;
+
+            background: #39ff14;
 
             border-color:
                 #39ff14;
 
+            text-decoration: none;
+
         }
 
+
+        .back-btn:visited {
+
+            color: #39ff14;
+
+            text-decoration: none;
+
+        }
+
+
+        .back-btn:visited:hover {
+
+            color: #050505;
+
+        }
+
+
+        /* =====================================================
+           TITLE
+        ===================================================== */
 
         .memory-title {
 
@@ -419,18 +450,24 @@
         @keyframes matchFlash {
 
             0% {
+
                 transform:
                     scale(1);
+
             }
 
             50% {
+
                 transform:
                     scale(1.06);
+
             }
 
             100% {
+
                 transform:
                     scale(1);
+
             }
 
         }
@@ -701,7 +738,7 @@
 
 
             <a
-                href="../index.html"
+                href="../../index.html"
                 class="back-btn"
             >
                 ← ANA SAYFA
@@ -799,6 +836,7 @@
                     RESTART
                 </button>
 
+
             </div>
 
 
@@ -817,6 +855,7 @@
         class="win-screen"
     >
 
+
         <div class="win-box">
 
 
@@ -832,6 +871,7 @@
                 <br>
 
                 MOVES:
+
                 <strong
                     id="final-moves"
                 >
@@ -841,6 +881,7 @@
                 <br>
 
                 TIME:
+
                 <strong
                     id="final-time"
                 >
@@ -850,6 +891,7 @@
                 <br>
 
                 BEST:
+
                 <strong
                     id="final-best"
                 >
@@ -874,6 +916,7 @@
 
 
     <script src="memory.js"></script>
+
 
 </body>
 
