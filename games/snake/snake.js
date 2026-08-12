@@ -36,6 +36,170 @@ highScoreElement.textContent = highScore;
 
 
 // ============================
+// SUPABASE
+// ============================
+
+const SUPABASE_URL =
+    "https://zvxzfwftwvkjvqvdqabo.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_GF0KjdrmsluAuSDW9SmkLg_svFg1SrL";
+
+let doguGamesSupabase = null;
+
+
+// ============================
+// SUPABASE BAĞLANTISI
+// ============================
+
+async function initSupabase() {
+
+    if (doguGamesSupabase) {
+        return doguGamesSupabase;
+    }
+
+
+    if (!window.supabase) {
+
+        await new Promise((resolve, reject) => {
+
+            const script =
+                document.createElement("script");
+
+            script.src =
+                "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+            script.onload = resolve;
+
+            script.onerror = reject;
+
+            document.head.appendChild(script);
+
+        });
+
+    }
+
+
+    doguGamesSupabase =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    return doguGamesSupabase;
+
+}
+
+
+// ============================
+// SKORU SUPABASE'E KAYDET
+// ============================
+
+async function saveScoreToSupabase(finalScore) {
+
+    if (finalScore <= 0) {
+
+        console.log(
+            "Skor 0 olduğu için kaydedilmedi."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const client =
+            await initSupabase();
+
+
+        // ============================
+        // GİRİŞ YAPMIŞ KULLANICI
+        // ============================
+
+        const {
+            data: {
+                user
+            },
+            error: authError
+        } =
+            await client.auth.getUser();
+
+
+        if (authError) {
+
+            console.error(
+                "Kullanıcı bilgisi alınamadı:",
+                authError
+            );
+
+            return;
+        }
+
+
+        // Kullanıcı giriş yapmamışsa
+        if (!user) {
+
+            console.warn(
+                "Skor kaydedilmedi: Kullanıcı giriş yapmamış."
+            );
+
+            return;
+        }
+
+
+        // ============================
+        // SKORU KAYDET
+        // ============================
+
+        const {
+            error
+        } =
+            await client
+                .from("scores")
+                .insert({
+
+                    user_id: user.id,
+
+                    game: "snake",
+
+                    score: finalScore
+
+                });
+
+
+        if (error) {
+
+            console.error(
+                "Snake skoru Supabase'e kaydedilemedi:",
+                error
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "Snake skoru başarıyla kaydedildi:",
+            finalScore
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Supabase skor kayıt hatası:",
+            error
+        );
+
+    }
+
+}
+
+
+// ============================
 // START GAME
 // ============================
 
@@ -43,38 +207,47 @@ function startGame() {
 
     // Snake başlangıçta 3 parçalı
     snake = [
+
         {
             x: 10,
             y: 10
         },
+
         {
             x: 9,
             y: 10
         },
+
         {
             x: 8,
             y: 10
         }
+
     ];
 
 
     // Başlangıç yönü sağ
     direction = {
+
         x: 1,
         y: 0
+
     };
 
 
     nextDirection = {
+
         x: 1,
         y: 0
+
     };
 
 
     // Skoru sıfırla
     score = 0;
 
-    scoreElement.textContent = score;
+    scoreElement.textContent =
+        score;
 
 
     // Her oyun yavaş başlar
@@ -97,10 +270,11 @@ function startGame() {
 
 
     // Oyunu başlat
-    gameLoop = setInterval(
-        updateGame,
-        gameSpeed
-    );
+    gameLoop =
+        setInterval(
+            updateGame,
+            gameSpeed
+        );
 
 }
 
@@ -111,13 +285,21 @@ function startGame() {
 
 function updateGame() {
 
-    direction = nextDirection;
+    direction =
+        nextDirection;
 
 
     // Yeni kafa pozisyonu
     const head = {
-        x: snake[0].x + direction.x,
-        y: snake[0].y + direction.y
+
+        x:
+            snake[0].x +
+            direction.x,
+
+        y:
+            snake[0].y +
+            direction.y
+
     };
 
 
@@ -126,15 +308,21 @@ function updateGame() {
     // ============================
 
     if (
+
         head.x < 0 ||
+
         head.x >= tileCount ||
+
         head.y < 0 ||
+
         head.y >= tileCount
+
     ) {
 
         gameOver();
 
         return;
+
     }
 
 
@@ -142,16 +330,24 @@ function updateGame() {
     // KENDİNE ÇARPMA
     // ============================
 
-    for (let i = 0; i < snake.length; i++) {
+    for (
+        let i = 0;
+        i < snake.length;
+        i++
+    ) {
 
         if (
+
             head.x === snake[i].x &&
+
             head.y === snake[i].y
+
         ) {
 
             gameOver();
 
             return;
+
         }
 
     }
@@ -166,39 +362,55 @@ function updateGame() {
     // ============================
 
     if (
+
         head.x === food.x &&
+
         head.y === food.y
+
     ) {
 
         // Skoru artır
         score += 10;
 
-        scoreElement.textContent = score;
+        scoreElement.textContent =
+            score;
 
 
         // ============================
         // KADEMELİ HIZLANMA
         // ============================
 
-        gameSpeed = Math.max(
-            MIN_GAME_SPEED,
-            gameSpeed - SPEED_INCREASE
-        );
+        gameSpeed =
+            Math.max(
+
+                MIN_GAME_SPEED,
+
+                gameSpeed -
+                SPEED_INCREASE
+
+            );
 
 
         // Yeni hızı uygula
         clearInterval(gameLoop);
 
-        gameLoop = setInterval(
-            updateGame,
-            gameSpeed
-        );
+
+        gameLoop =
+            setInterval(
+
+                updateGame,
+
+                gameSpeed
+
+            );
 
 
         // Yeni yem oluştur
         createFood();
 
-    } else {
+    }
+
+    else {
 
         // Yem yenmediyse kuyruğu sil
         snake.pop();
@@ -222,13 +434,20 @@ function drawGame() {
     // ARKA PLAN
     // ============================
 
-    ctx.fillStyle = "#050505";
+    ctx.fillStyle =
+        "#050505";
+
 
     ctx.fillRect(
+
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
+
     );
 
 
@@ -246,8 +465,13 @@ function drawGame() {
     if (food) {
 
         drawApple(
-            food.x * gridSize,
-            food.y * gridSize
+
+            food.x *
+            gridSize,
+
+            food.y *
+            gridSize
+
         );
 
     }
@@ -259,34 +483,49 @@ function drawGame() {
 
     if (snake) {
 
-        snake.forEach((part, index) => {
+        snake.forEach(
 
-            const x = part.x * gridSize;
-            const y = part.y * gridSize;
+            (part, index) => {
+
+                const x =
+                    part.x *
+                    gridSize;
+
+                const y =
+                    part.y *
+                    gridSize;
 
 
-            // ========================
-            // KAFA
-            // ========================
+                // ========================
+                // KAFA
+                // ========================
 
-            if (index === 0) {
+                if (index === 0) {
 
-                drawSnakeHead(x, y);
+                    drawSnakeHead(
+                        x,
+                        y
+                    );
+
+                }
+
+
+                // ========================
+                // GÖVDE
+                // ========================
+
+                else {
+
+                    drawSnakeBody(
+                        x,
+                        y
+                    );
+
+                }
 
             }
 
-
-            // ========================
-            // GÖVDE
-            // ========================
-
-            else {
-
-                drawSnakeBody(x, y);
-
-            }
-
-        });
+        );
 
     }
 
@@ -300,29 +539,44 @@ function drawGame() {
 function drawSnakeHead(x, y) {
 
     // Kafa
-    ctx.fillStyle = "#39ff14";
+    ctx.fillStyle =
+        "#39ff14";
+
 
     ctx.fillRect(
+
         x + 1,
+
         y + 1,
+
         gridSize - 2,
+
         gridSize - 2
+
     );
 
 
     // Kafa için hafif koyu alt bölüm
-    ctx.fillStyle = "#22c55e";
+    ctx.fillStyle =
+        "#22c55e";
+
 
     ctx.fillRect(
+
         x + 2,
+
         y + 14,
+
         gridSize - 4,
+
         4
+
     );
 
 
     // Gözler
-    ctx.fillStyle = "#050505";
+    ctx.fillStyle =
+        "#050505";
 
 
     const eyeSize = 4;
@@ -335,17 +589,28 @@ function drawSnakeHead(x, y) {
     if (direction.x === 1) {
 
         ctx.fillRect(
+
             x + 13,
+
             y + 4,
+
             eyeSize,
+
             eyeSize
+
         );
 
+
         ctx.fillRect(
+
             x + 13,
+
             y + 12,
+
             eyeSize,
+
             eyeSize
+
         );
 
     }
@@ -358,17 +623,28 @@ function drawSnakeHead(x, y) {
     else if (direction.x === -1) {
 
         ctx.fillRect(
+
             x + 3,
+
             y + 4,
+
             eyeSize,
+
             eyeSize
+
         );
 
+
         ctx.fillRect(
+
             x + 3,
+
             y + 12,
+
             eyeSize,
+
             eyeSize
+
         );
 
     }
@@ -381,17 +657,28 @@ function drawSnakeHead(x, y) {
     else if (direction.y === 1) {
 
         ctx.fillRect(
+
             x + 4,
+
             y + 13,
+
             eyeSize,
+
             eyeSize
+
         );
 
+
         ctx.fillRect(
+
             x + 12,
+
             y + 13,
+
             eyeSize,
+
             eyeSize
+
         );
 
     }
@@ -404,17 +691,28 @@ function drawSnakeHead(x, y) {
     else {
 
         ctx.fillRect(
+
             x + 4,
+
             y + 3,
+
             eyeSize,
+
             eyeSize
+
         );
 
+
         ctx.fillRect(
+
             x + 12,
+
             y + 3,
+
             eyeSize,
+
             eyeSize
+
         );
 
     }
@@ -429,35 +727,56 @@ function drawSnakeHead(x, y) {
 function drawSnakeBody(x, y) {
 
     // Ana gövde
-    ctx.fillStyle = "#22c55e";
+    ctx.fillStyle =
+        "#22c55e";
+
 
     ctx.fillRect(
+
         x + 1,
+
         y + 1,
+
         gridSize - 2,
+
         gridSize - 2
+
     );
 
 
     // Parlak pixel
-    ctx.fillStyle = "#39ff14";
+    ctx.fillStyle =
+        "#39ff14";
+
 
     ctx.fillRect(
+
         x + 3,
+
         y + 3,
+
         4,
+
         4
+
     );
 
 
     // Koyu pixel
-    ctx.fillStyle = "#16803c";
+    ctx.fillStyle =
+        "#16803c";
+
 
     ctx.fillRect(
+
         x + 13,
+
         y + 13,
+
         4,
+
         4
+
     );
 
 }
@@ -473,20 +792,33 @@ function drawApple(x, y) {
     // ELMA GÖVDESİ
     // ============================
 
-    ctx.fillStyle = "#ff1744";
+    ctx.fillStyle =
+        "#ff1744";
+
 
     ctx.fillRect(
+
         x + 4,
+
         y + 5,
+
         12,
+
         11
+
     );
 
+
     ctx.fillRect(
+
         x + 2,
+
         y + 8,
+
         16,
+
         7
+
     );
 
 
@@ -494,13 +826,20 @@ function drawApple(x, y) {
     // ELMA GÖLGESİ
     // ============================
 
-    ctx.fillStyle = "#c4002f";
+    ctx.fillStyle =
+        "#c4002f";
+
 
     ctx.fillRect(
+
         x + 4,
+
         y + 13,
+
         12,
+
         3
+
     );
 
 
@@ -508,13 +847,20 @@ function drawApple(x, y) {
     // PARLAK PIXEL
     // ============================
 
-    ctx.fillStyle = "#ff6b81";
+    ctx.fillStyle =
+        "#ff6b81";
+
 
     ctx.fillRect(
+
         x + 5,
+
         y + 6,
+
         4,
+
         4
+
     );
 
 
@@ -522,13 +868,20 @@ function drawApple(x, y) {
     // SAP
     // ============================
 
-    ctx.fillStyle = "#8b4513";
+    ctx.fillStyle =
+        "#8b4513";
+
 
     ctx.fillRect(
+
         x + 10,
+
         y + 1,
+
         3,
+
         5
+
     );
 
 
@@ -536,13 +889,20 @@ function drawApple(x, y) {
     // YAPRAK
     // ============================
 
-    ctx.fillStyle = "#39ff14";
+    ctx.fillStyle =
+        "#39ff14";
+
 
     ctx.fillRect(
+
         x + 13,
+
         y + 2,
+
         4,
+
         3
+
     );
 
 }
@@ -554,7 +914,9 @@ function drawApple(x, y) {
 
 function drawGrid() {
 
-    ctx.strokeStyle = "#151515";
+    ctx.strokeStyle =
+        "#151515";
+
 
     ctx.lineWidth = 1;
 
@@ -562,19 +924,35 @@ function drawGrid() {
     // Dikey çizgiler
 
     for (
+
         let x = 0;
+
         x <= canvas.width;
+
         x += gridSize
+
     ) {
 
         ctx.beginPath();
 
-        ctx.moveTo(x, 0);
+
+        ctx.moveTo(
+
+            x,
+
+            0
+
+        );
+
 
         ctx.lineTo(
+
             x,
+
             canvas.height
+
         );
+
 
         ctx.stroke();
 
@@ -584,19 +962,35 @@ function drawGrid() {
     // Yatay çizgiler
 
     for (
+
         let y = 0;
+
         y <= canvas.height;
+
         y += gridSize
+
     ) {
 
         ctx.beginPath();
 
-        ctx.moveTo(0, y);
+
+        ctx.moveTo(
+
+            0,
+
+            y
+
+        );
+
 
         ctx.lineTo(
+
             canvas.width,
+
             y
+
         );
+
 
         ctx.stroke();
 
@@ -619,11 +1013,17 @@ function createFood() {
         food = {
 
             x: Math.floor(
-                Math.random() * tileCount
+
+                Math.random() *
+                tileCount
+
             ),
 
             y: Math.floor(
-                Math.random() * tileCount
+
+                Math.random() *
+                tileCount
+
             )
 
         };
@@ -638,13 +1038,17 @@ function createFood() {
         for (const part of snake) {
 
             if (
+
                 part.x === food.x &&
+
                 part.y === food.y
+
             ) {
 
                 validPosition = false;
 
                 break;
+
             }
 
         }
@@ -666,6 +1070,13 @@ function gameOver() {
 
 
     // ============================
+    // SKORU SUPABASE'E KAYDET
+    // ============================
+
+    saveScoreToSupabase(score);
+
+
+    // ============================
     // HIGH SCORE
     // ============================
 
@@ -675,8 +1086,11 @@ function gameOver() {
 
 
         localStorage.setItem(
+
             "snakeHighScore",
+
             highScore
+
         );
 
 
@@ -693,56 +1107,84 @@ function gameOver() {
     ctx.fillStyle =
         "rgba(0, 0, 0, 0.75)";
 
+
     ctx.fillRect(
+
         0,
+
         0,
+
         canvas.width,
+
         canvas.height
+
     );
 
 
-    ctx.textAlign = "center";
+    ctx.textAlign =
+        "center";
 
 
     // GAME OVER
 
-    ctx.fillStyle = "#ff1744";
+    ctx.fillStyle =
+        "#ff1744";
+
 
     ctx.font =
         "24px 'Courier New'";
 
+
     ctx.fillText(
+
         "GAME OVER",
+
         canvas.width / 2,
+
         canvas.height / 2 - 15
+
     );
 
 
     // SCORE
 
-    ctx.fillStyle = "#f5f5dc";
+    ctx.fillStyle =
+        "#f5f5dc";
+
 
     ctx.font =
         "14px 'Courier New'";
 
+
     ctx.fillText(
+
         "SCORE: " + score,
+
         canvas.width / 2,
+
         canvas.height / 2 + 15
+
     );
 
 
     // RESTART
 
-    ctx.fillStyle = "#39ff14";
+    ctx.fillStyle =
+        "#39ff14";
+
 
     ctx.font =
         "12px 'Courier New'";
 
+
     ctx.fillText(
+
         "PRESS SPACE TO RESTART",
+
         canvas.width / 2,
+
         canvas.height / 2 + 45
+
     );
 
 }
@@ -753,7 +1195,9 @@ function gameOver() {
 // ============================
 
 document.addEventListener(
+
     "keydown",
+
     function(event) {
 
         const key =
@@ -767,13 +1211,19 @@ document.addEventListener(
         const gameKeys = [
 
             "arrowup",
+
             "arrowdown",
+
             "arrowleft",
+
             "arrowright",
 
             "w",
+
             "a",
+
             "s",
+
             "d",
 
             " "
@@ -821,8 +1271,11 @@ document.addEventListener(
         // ============================
 
         if (
+
             key === "arrowup" ||
+
             key === "w"
+
         ) {
 
             // Aşağı giderken direkt yukarı
@@ -831,8 +1284,11 @@ document.addEventListener(
             if (direction.y !== 1) {
 
                 nextDirection = {
+
                     x: 0,
+
                     y: -1
+
                 };
 
             }
@@ -845,8 +1301,11 @@ document.addEventListener(
         // ============================
 
         if (
+
             key === "arrowdown" ||
+
             key === "s"
+
         ) {
 
             // Yukarı giderken direkt aşağı
@@ -855,8 +1314,11 @@ document.addEventListener(
             if (direction.y !== -1) {
 
                 nextDirection = {
+
                     x: 0,
+
                     y: 1
+
                 };
 
             }
@@ -869,8 +1331,11 @@ document.addEventListener(
         // ============================
 
         if (
+
             key === "arrowleft" ||
+
             key === "a"
+
         ) {
 
             // Sağa giderken direkt sola
@@ -879,8 +1344,11 @@ document.addEventListener(
             if (direction.x !== 1) {
 
                 nextDirection = {
+
                     x: -1,
+
                     y: 0
+
                 };
 
             }
@@ -893,8 +1361,11 @@ document.addEventListener(
         // ============================
 
         if (
+
             key === "arrowright" ||
+
             key === "d"
+
         ) {
 
             // Sola giderken direkt sağa
@@ -903,8 +1374,11 @@ document.addEventListener(
             if (direction.x !== -1) {
 
                 nextDirection = {
+
                     x: 1,
+
                     y: 0
+
                 };
 
             }
@@ -912,6 +1386,7 @@ document.addEventListener(
         }
 
     }
+
 );
 
 
@@ -919,41 +1394,63 @@ document.addEventListener(
 // INITIAL SCREEN
 // ============================
 
-ctx.fillStyle = "#050505";
+ctx.fillStyle =
+    "#050505";
+
 
 ctx.fillRect(
+
     0,
+
     0,
+
     canvas.width,
+
     canvas.height
+
 );
 
 
 drawGrid();
 
 
-ctx.textAlign = "center";
+ctx.textAlign =
+    "center";
 
 
-ctx.fillStyle = "#39ff14";
+ctx.fillStyle =
+    "#39ff14";
+
 
 ctx.font =
     "22px 'Courier New'";
 
+
 ctx.fillText(
+
     "SNAKE",
+
     canvas.width / 2,
+
     canvas.height / 2 - 20
+
 );
 
 
-ctx.fillStyle = "#f5f5dc";
+ctx.fillStyle =
+    "#f5f5dc";
+
 
 ctx.font =
     "13px 'Courier New'";
 
+
 ctx.fillText(
+
     "PRESS SPACE TO START",
+
     canvas.width / 2,
+
     canvas.height / 2 + 20
+
 );
