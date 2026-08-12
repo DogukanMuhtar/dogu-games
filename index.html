@@ -1,490 +1,517 @@
-<!DOCTYPE html>
-<html lang="tr">
+<meta charset="UTF-8">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
+<title>Doğu Games</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Doğu Games</title>
-
-    <link rel="stylesheet" href="style.css">
-
-</head>
+<link rel="stylesheet" href="style.css">
 
 
-<body>
+<!-- =========================
+     NAVBAR
+========================== -->
+
+<header class="navbar">
+
+    <a href="#home" class="logo">
+        DOĞU<span>GAMES</span>
+    </a>
 
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+    <nav class="nav-links">
 
-    <header class="navbar">
-
-        <a href="#home" class="logo">
-            DOĞU<span>GAMES</span>
+        <a href="#home">
+            ANA SAYFA
         </a>
 
+        <a href="#games">
+            OYUNLAR
+        </a>
 
-        <nav class="nav-links">
+        <a href="#leaderboard">
+            LEADERBOARD
+        </a>
 
-            <a href="#home">
-                ANA SAYFA
+    </nav>
+
+
+    <a href="login.html" class="login-btn">
+        GİRİŞ YAP
+    </a>
+
+</header>
+
+
+
+<!-- =========================
+     HERO
+========================== -->
+
+<main>
+
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <p class="eyebrow">
+                INSERT COIN TO START
+            </p>
+
+
+            <h1>
+                DOĞU
+                <br>
+                <span>GAMES</span>
+            </h1>
+
+
+            <p class="hero-text">
+                CLASSIC GAMES.
+                <br>
+                SIMPLE RULES.
+                <br>
+                HIGH SCORES.
+            </p>
+
+
+            <a href="#games" class="hero-btn">
+                START GAME
+                <span>▶</span>
             </a>
 
-            <a href="#games">
-                OYUNLAR
-            </a>
+        </div>
 
-            <a href="#leaderboard">
-                LEADERBOARD
-            </a>
-
-        </nav>
-
-
-        <button class="login-btn">
-            GİRİŞ YAP
-        </button>
-
-    </header>
+    </section>
 
 
 
     <!-- =========================
-         HERO
+         GAMES
     ========================== -->
 
-    <main>
+    <section class="games-section" id="games">
 
-        <section class="hero" id="home">
 
-            <div class="hero-content">
+        <div class="section-heading">
+
+            <div>
 
                 <p class="eyebrow">
-                    INSERT COIN TO START
+                    CHOOSE YOUR GAME
                 </p>
 
-
-                <h1>
-                    DOĞU
-                    <br>
-                    <span>GAMES</span>
-                </h1>
-
-
-                <p class="hero-text">
-                    CLASSIC GAMES.
-                    <br>
-                    SIMPLE RULES.
-                    <br>
-                    HIGH SCORES.
-                </p>
-
-
-                <a href="#games" class="hero-btn">
-                    START GAME
-                    <span>▶</span>
-                </a>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             GAMES
-        ========================== -->
-
-        <section class="games-section" id="games">
-
-
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        CHOOSE YOUR GAME
-                    </p>
-
-                    <h2>
-                        OYUNLAR
-                    </h2>
-
-                </div>
-
-
-                <p class="section-description">
-
-                    BİR OYUN SEÇ.
-                    <br>
-                    SKORUNU YAP.
-                    <br>
-                    LEADERBOARD'DA YERİNİ AL.
-
-                </p>
+                <h2>
+                    OYUNLAR
+                </h2>
 
             </div>
 
 
+            <p class="section-description">
 
-            <div class="games-grid">
+                BİR OYUN SEÇ.
+                <br>
+                SKORUNU YAP.
+                <br>
+                LEADERBOARD'DA YERİNİ AL.
 
+            </p>
 
-                <!-- =========================
-                     SNAKE
-                ========================== -->
-
-                <article class="game-card">
-
-                    <div class="game-number">
-                        01
-                    </div>
-
-
-                    <div class="game-icon">
-                        🐍
-                    </div>
-
-
-                    <h3>
-                        SNAKE
-                    </h3>
-
-
-                    <p>
-                        YILANINI BÜYÜT,
-                        <br>
-                        EN YÜKSEK SKORU YAP.
-                    </p>
-
-
-                    <a href="games/snake/snake.html" class="play-game-btn">
-                        OYNA <span>▶</span>
-                    </a>
-
-                </article>
-
-
-
-                <!-- =========================
-                     MEMORY
-                ========================== -->
-
-                <article class="game-card">
-
-                    <div class="game-number">
-                        02
-                    </div>
-
-
-                    <div class="game-icon">
-                        🧠
-                    </div>
-
-
-                    <h3>
-                        MEMORY
-                    </h3>
-
-
-                    <p>
-                        KARTLARIN EŞLERİNİ BUL.
-                        <br>
-                        HAFIZANI TEST ET.
-                    </p>
-
-
-                    <a href="games/memory/memory.html" class="play-game-btn">
-                        OYNA <span>▶</span>
-                    </a>
-
-                </article>
-
-
-
-                <!-- =========================
-                     AIM TRAINER
-                ========================== -->
-
-                <article class="game-card">
-
-                    <div class="game-number">
-                        03
-                    </div>
-
-
-                    <div class="game-icon">
-                        🎯
-                    </div>
-
-
-                    <h3>
-                        AIM TRAINER
-                    </h3>
-
-
-                    <p>
-                        HEDEFLERİ VUR.
-                        <br>
-                        REFLEKSLERİNİ TEST ET.
-                    </p>
-
-
-                    <a href="games/aim-trainer/aim.html" class="play-game-btn">
-                        OYNA <span>▶</span>
-                    </a>
-
-                </article>
-
-
-
-                <!-- =========================
-                     TYPING SPEED
-                ========================== -->
-
-                <article class="game-card">
-
-                    <div class="game-number">
-                        04
-                    </div>
-
-
-                    <div class="game-icon">
-                        ⌨️
-                    </div>
-
-
-                    <h3>
-                        TYPING SPEED
-                    </h3>
-
-
-                    <p>
-                        NE KADAR HIZLI
-                        <br>
-                        YAZABİLİYORSUN?
-                    </p>
-
-
-                    <a href="games/typing/typing.html" class="play-game-btn">
-                        OYNA <span>▶</span>
-                    </a>
-
-                </article>
-
-
-
-                <!-- =========================
-                     2048
-                ========================== -->
-
-                <article class="game-card">
-
-                    <div class="game-number">
-                        05
-                    </div>
-
-
-                    <div class="game-icon">
-                        🔢
-                    </div>
-
-
-                    <h3>
-                        2048
-                    </h3>
-
-
-                    <p>
-                        SAYILARI BİRLEŞTİR.
-                        <br>
-                        2048'E ULAŞ.
-                    </p>
-
-
-                    <a href="games/2048/2048.html" class="play-game-btn">
-                        OYNA <span>▶</span>
-                    </a>
-
-                </article>
-
-
-
-                <!-- =========================
-                     PONG
-                ========================== -->
-
-                <article class="game-card">
-
-                    <div class="game-number">
-                        06
-                    </div>
-
-
-                    <div class="game-icon">
-                        🏓
-                    </div>
-
-
-                    <h3>
-                        PONG
-                    </h3>
-
-
-                    <p>
-                        KLASİK PONG.
-                        <br>
-                        RAKİBİNİ YEN.
-                    </p>
-
-
-                    <button class="play-game-btn">
-                        OYNA <span>▶</span>
-                    </button>
-
-                </article>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =========================
-             LEADERBOARD
-        ========================== -->
-
-        <section class="leaderboard-section" id="leaderboard">
-
-
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        TOP PLAYERS
-                    </p>
-
-                    <h2>
-                        LEADERBOARD
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-
-            <div class="leaderboard">
-
-
-                <div class="leaderboard-header">
-
-                    <span>
-                        #
-                    </span>
-
-                    <span>
-                        PLAYER
-                    </span>
-
-                    <span>
-                        SCORE
-                    </span>
-
-                </div>
-
-
-
-                <div class="leaderboard-row">
-
-                    <span class="rank">
-                        01
-                    </span>
-
-                    <strong>
-                        SHADOW
-                    </strong>
-
-                    <span>
-                        12,450
-                    </span>
-
-                </div>
-
-
-
-                <div class="leaderboard-row">
-
-                    <span class="rank">
-                        02
-                    </span>
-
-                    <strong>
-                        RAPTOR
-                    </strong>
-
-                    <span>
-                        10,820
-                    </span>
-
-                </div>
-
-
-
-                <div class="leaderboard-row">
-
-                    <span class="rank">
-                        03
-                    </span>
-
-                    <strong>
-                        VIPER
-                    </strong>
-
-                    <span>
-                        9,760
-                    </span>
-
-                </div>
-
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer>
-
-
-        <div class="footer-logo">
-            DOĞU<span>GAMES</span>
         </div>
 
 
-        <p>
-            © TÜM HAKLARI SAKLIDIR. 2026 DOĞU GAMES
-        </p>
+
+        <!-- =========================
+             GAMES GRID
+        ========================== -->
+
+        <div class="games-grid">
 
 
-    </footer>
+            <!-- =========================
+                 01 - SNAKE
+            ========================== -->
+
+            <article class="game-card">
+
+                <div class="game-number">
+                    01
+                </div>
+
+
+                <div class="game-icon">
+                    🐍
+                </div>
+
+
+                <h3>
+                    SNAKE
+                </h3>
+
+
+                <p>
+                    YILANINI BÜYÜT,
+                    <br>
+                    EN YÜKSEK SKORU YAP.
+                </p>
+
+
+                <a
+                    href="games/snake/snake.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
 
 
 
-    <script src="script.js"></script>
+            <!-- =========================
+                 02 - MEMORY
+            ========================== -->
 
-</body>
+            <article class="game-card">
 
-</html>
+                <div class="game-number">
+                    02
+                </div>
+
+
+                <div class="game-icon">
+                    🧠
+                </div>
+
+
+                <h3>
+                    MEMORY
+                </h3>
+
+
+                <p>
+                    KARTLARIN EŞLERİNİ BUL.
+                    <br>
+                    HAFIZANI TEST ET.
+                </p>
+
+
+                <a
+                    href="games/memory/memory.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
+
+
+
+            <!-- =========================
+                 03 - AIM TRAINER
+            ========================== -->
+
+            <article class="game-card">
+
+                <div class="game-number">
+                    03
+                </div>
+
+
+                <div class="game-icon">
+                    🎯
+                </div>
+
+
+                <h3>
+                    AIM TRAINER
+                </h3>
+
+
+                <p>
+                    HEDEFLERİ VUR.
+                    <br>
+                    REFLEKSLERİNİ TEST ET.
+                </p>
+
+
+                <a
+                    href="games/aim-trainer/aim.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
+
+
+
+            <!-- =========================
+                 04 - TYPING SPEED
+            ========================== -->
+
+            <article class="game-card">
+
+                <div class="game-number">
+                    04
+                </div>
+
+
+                <div class="game-icon">
+                    ⌨️
+                </div>
+
+
+                <h3>
+                    TYPING SPEED
+                </h3>
+
+
+                <p>
+                    NE KADAR HIZLI
+                    <br>
+                    YAZABİLİYORSUN?
+                </p>
+
+
+                <a
+                    href="games/typing/typing.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
+
+
+
+            <!-- =========================
+                 05 - 2048
+            ========================== -->
+
+            <article class="game-card">
+
+                <div class="game-number">
+                    05
+                </div>
+
+
+                <div class="game-icon">
+                    🔢
+                </div>
+
+
+                <h3>
+                    2048
+                </h3>
+
+
+                <p>
+                    SAYILARI BİRLEŞTİR.
+                    <br>
+                    2048'E ULAŞ.
+                </p>
+
+
+                <a
+                    href="games/2048/2048.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
+
+
+
+            <!-- =========================
+                 06 - PONG
+            ========================== -->
+
+            <article class="game-card">
+
+                <div class="game-number">
+                    06
+                </div>
+
+
+                <div class="game-icon">
+                    🏓
+                </div>
+
+
+                <h3>
+                    PONG
+                </h3>
+
+
+                <p>
+                    KLASİK PONG.
+                    <br>
+                    RAKİBİNİ YEN.
+                </p>
+
+
+                <a
+                    href="games/pong/pong.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
+
+
+
+            <!-- =========================
+                 07 - İĞNE SAPLAMA
+            ========================== -->
+
+            <article class="game-card">
+
+                <div class="game-number">
+                    07
+                </div>
+
+
+                <div class="game-icon">
+                    📌
+                </div>
+
+
+                <h3>
+                    NEEDLE
+                </h3>
+
+
+                <p>
+                    İĞNELERİ ÇEMBERE SAPLA.
+                    <br>
+                    EN YÜKSEK SKORU YAP.
+                </p>
+
+
+                <a
+                    href="games/needle/needle.html"
+                    class="play-game-btn"
+                >
+                    OYNA <span>▶</span>
+                </a>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         LEADERBOARD
+    ========================== -->
+
+    <section
+        class="leaderboard-section"
+        id="leaderboard"
+    >
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    TOP PLAYERS
+                </p>
+
+                <h2>
+                    LEADERBOARD
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div
+            class="leaderboard"
+            id="leaderboard-list"
+        >
+
+
+            <div class="leaderboard-header">
+
+                <span>
+                    #
+                </span>
+
+                <span>
+                    PLAYER
+                </span>
+
+                <span>
+                    SCORE
+                </span>
+
+            </div>
+
+
+            <div class="leaderboard-row">
+
+                <span class="rank">
+                    -
+                </span>
+
+                <strong>
+                    YÜKLENİYOR...
+                </strong>
+
+                <span>
+                    -
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================== -->
+
+<footer>
+
+
+    <div class="footer-logo">
+        DOĞU<span>GAMES</span>
+    </div>
+
+
+    <p>
+        © TÜM HAKLARI SAKLIDIR. 2026 DOĞU GAMES
+    </p>
+
+
+</footer>
+
+
+
+<!-- =========================
+     SUPABASE
+========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- =========================
+     ANA JAVASCRIPT
+========================== -->
+
+<script src="script.js"></script>
