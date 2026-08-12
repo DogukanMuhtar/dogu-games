@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Giriş Yap - Doğu Games</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .auth-page {
+            min-height: calc(100vh - 90px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 40px 20px;
+        }
+
+        .auth-box {
+            width: min(430px, 92vw);
+
+            padding: 45px 40px;
+
+            background: #080808;
+
+            border: 2px solid #333;
+
+            text-align: center;
+        }
+
+        .auth-label {
+            color: #39ff14;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            margin-bottom: 15px;
+        }
+
+        .auth-title {
+            color: #f5f5dc;
+
+            font-size: 32px;
+
+            letter-spacing: 4px;
+
+            margin-bottom: 35px;
+        }
+
+        .auth-form {
+            text-align: left;
+        }
+
+        .auth-form label {
+            display: block;
+
+            color: #888;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            margin-bottom: 8px;
+        }
+
+        .auth-form input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            margin-bottom: 20px;
+
+            background: #050505;
+
+            color: #f5f5dc;
+
+            border: 2px solid #333;
+
+            outline: none;
+
+            font-family: "Courier New", monospace;
+
+            font-size: 14px;
+        }
+
+        .auth-form input:focus {
+            border-color: #39ff14;
+        }
+
+        .auth-submit {
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 5px;
+
+            background: transparent;
+
+            color: #39ff14;
+
+            border: 2px solid #39ff14;
+
+            font-family: "Courier New", monospace;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            letter-spacing: 2px;
+
+            transition: 0.2s;
+        }
+
+        .auth-submit:hover {
+            background: #39ff14;
+
+            color: #000;
+        }
+
+        .auth-message {
+            min-height: 20px;
+
+            margin-top: 18px;
+
+            font-size: 11px;
+
+            text-align: center;
+        }
+
+        .auth-switch {
+            margin-top: 25px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #222;
+
+            color: #777;
+
+            font-size: 11px;
+        }
+
+        .auth-switch button {
+            margin-top: 10px;
+
+            background: transparent;
+
+            border: none;
+
+            color: #39ff14;
+
+            font-family: "Courier New", monospace;
+
+            font-size: 11px;
+
+            cursor: pointer;
+        }
+
+        .auth-switch button:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: inline-block;
+
+            margin-top: 25px;
+
+            color: #888;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+        }
+
+        .back-home:hover {
+            color: #39ff14;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+
+        <a href="index.html" class="logo">
+            DOĞU<span>GAMES</span>
+        </a>
+
+
+        <nav class="nav-links">
+
+            <a href="index.html#home">
+                ANA SAYFA
+            </a>
+
+            <a href="index.html#games">
+                OYUNLAR
+            </a>
+
+            <a href="index.html#leaderboard">
+                LEADERBOARD
+            </a>
+
+        </nav>
+
+
+        <a href="login.html" class="login-btn">
+            GİRİŞ YAP
+        </a>
+
+    </header>
+
+
+
+    <!-- =========================
+         AUTH
+    ========================== -->
+
+    <main class="auth-page">
+
+
+        <div class="auth-box">
+
+
+            <p class="auth-label">
+                DOĞU GAMES ///
+            </p>
+
+
+            <!-- =====================
+                 LOGIN
+            ====================== -->
+
+            <div id="login-section">
+
+                <h1 class="auth-title">
+                    GİRİŞ YAP
+                </h1>
+
+
+                <form id="login-form" class="auth-form">
+
+
+                    <label for="login-email">
+                        E-POSTA
+                    </label>
+
+                    <input
+                        type="email"
+                        id="login-email"
+                        placeholder="ornek@mail.com"
+                        required
+                    >
+
+
+                    <label for="login-password">
+                        ŞİFRE
+                    </label>
+
+                    <input
+                        type="password"
+                        id="login-password"
+                        placeholder="••••••••"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit"
+                    >
+                        GİRİŞ YAP
+                    </button>
+
+
+                </form>
+
+
+                <div
+                    id="login-message"
+                    class="auth-message">
+                </div>
+
+
+                <div class="auth-switch">
+
+                    HESABIN YOK MU?
+
+                    <br>
+
+                    <button
+                        type="button"
+                        id="show-register"
+                    >
+                        KAYIT OL
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================
+                 REGISTER
+            ====================== -->
+
+            <div
+                id="register-section"
+                class="hidden"
+            >
+
+                <h1 class="auth-title">
+                    KAYIT OL
+                </h1>
+
+
+                <form
+                    id="register-form"
+                    class="auth-form"
+                >
+
+
+                    <label for="register-username">
+                        KULLANICI ADI
+                    </label>
+
+                    <input
+                        type="text"
+                        id="register-username"
+                        placeholder="DOGUKAN"
+                        minlength="3"
+                        maxlength="20"
+                        required
+                    >
+
+
+                    <label for="register-email">
+                        E-POSTA
+                    </label>
+
+                    <input
+                        type="email"
+                        id="register-email"
+                        placeholder="ornek@mail.com"
+                        required
+                    >
+
+
+                    <label for="register-password">
+                        ŞİFRE
+                    </label>
+
+                    <input
+                        type="password"
+                        id="register-password"
+                        placeholder="En az 6 karakter"
+                        minlength="6"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="auth-submit"
+                    >
+                        HESAP OLUŞTUR
+                    </button>
+
+
+                </form>
+
+
+                <div
+                    id="register-message"
+                    class="auth-message">
+                </div>
+
+
+                <div class="auth-switch">
+
+                    ZATEN HESABIN VAR MI?
+
+                    <br>
+
+                    <button
+                        type="button"
+                        id="show-login"
+                    >
+                        GİRİŞ YAP
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <a
+                href="index.html"
+                class="back-home"
+            >
+                ← ANA SAYFA
+            </a>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- SUPABASE -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // =====================================================
+    // SUPABASE BAĞLANTISI
+    // =====================================================
+
+    const SUPABASE_URL =
+        "https://zvxzfwftwvkjvqvdqabo.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_GF0KjdrmsluAuSDW9SmkLg_svfG1SrL";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    // =====================================================
+    // ELEMENTLER
+    // =====================================================
+
+    const loginSection =
+        document.getElementById("login-section");
+
+    const registerSection =
+        document.getElementById("register-section");
+
+    const showRegister =
+        document.getElementById("show-register");
+
+    const showLogin =
+        document.getElementById("show-login");
+
+
+    // =====================================================
+    // GİRİŞ / KAYIT EKRANI GEÇİŞİ
+    // =====================================================
+
+    showRegister.addEventListener("click", () => {
+
+        loginSection.classList.add("hidden");
+
+        registerSection.classList.remove("hidden");
+
+    });
+
+
+    showLogin.addEventListener("click", () => {
+
+        registerSection.classList.add("hidden");
+
+        loginSection.classList.remove("hidden");
+
+    });
+
+
+    // =====================================================
+    // PROFİL OLUŞTURMA
+    // =====================================================
+    // profiles tablosunda:
+    // id       = Auth kullanıcısının ID'si
+    // username = kullanıcının adı
+    //
+    // RLS policy:
+    // auth.uid() = id
+    //
+    // Bu fonksiyon sadece kullanıcı gerçekten giriş yaptıktan
+    // sonra çalışır.
+
+    async function ensureProfile(user) {
+
+        if (!user) {
+            return;
+        }
+
+        const username =
+            user.user_metadata?.username?.trim();
+
+        if (!username) {
+            return;
+        }
+
+
+        // Kullanıcının profili zaten var mı?
+        const {
+            data: existingProfile,
+            error: checkError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select("id")
+                .eq("id", user.id)
+                .maybeSingle();
+
+
+        if (checkError) {
+
+            throw checkError;
+
+        }
+
+
+        // Profil zaten varsa tekrar oluşturma
+        if (existingProfile) {
+
+            return;
+
+        }
+
+
+        // Profil yoksa oluştur
+        const {
+            error: insertError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .insert({
+                    id: user.id,
+                    username: username
+                });
+
+
+        if (insertError) {
+
+            throw insertError;
+
+        }
+
+    }
+
+
+    // =====================================================
+    // KAYIT OL
+    // =====================================================
+
+    document
+        .getElementById("register-form")
+        .addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+
+            const username =
+                document
+                    .getElementById("register-username")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("register-email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("register-password")
+                    .value;
+
+
+            const message =
+                document.getElementById("register-message");
+
+
+            message.textContent =
+                "HESAP OLUŞTURULUYOR...";
+
+            message.style.color =
+                "#888";
+
+
+            try {
+
+                // =================================================
+                // 1. USERNAME KONTROLÜ
+                // =================================================
+
+                const {
+                    data: existingProfile,
+                    error: usernameCheckError
+                } =
+                    await supabaseClient
+                        .from("profiles")
+                        .select("id")
+                        .eq("username", username)
+                        .maybeSingle();
+
+
+                if (usernameCheckError) {
+
+                    throw usernameCheckError;
+
+                }
+
+
+                if (existingProfile) {
+
+                    message.textContent =
+                        "BU KULLANICI ADI ZATEN KULLANILIYOR.";
+
+                    message.style.color =
+                        "#ff4444";
+
+                    return;
+
+                }
+
+
+                // =================================================
+                // 2. SUPABASE AUTH KULLANICISI OLUŞTUR
+                // =================================================
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth.signUp({
+
+                        email: email,
+
+                        password: password,
+
+                        options: {
+
+                            data: {
+                                username: username
+                            }
+
+                        }
+
+                    });
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                if (!data.user) {
+
+                    throw new Error(
+                        "Kullanıcı oluşturulamadı."
+                    );
+
+                }
+
+
+                // =================================================
+                // 3. E-POSTA DOĞRULAMASI
+                // =================================================
+
+                if (data.session) {
+
+                    // E-posta doğrulaması kapalıysa
+                    // session hemen oluşur.
+
+                    await ensureProfile(data.user);
+
+
+                    message.textContent =
+                        "KAYIT BAŞARILI! GİRİŞ YAPILIYOR...";
+
+                    message.style.color =
+                        "#39ff14";
+
+
+                    document
+                        .getElementById("register-form")
+                        .reset();
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            "index.html";
+
+                    }, 1000);
+
+                }
+
+                else {
+
+                    // E-posta doğrulaması açıksa burada
+                    // profiles INSERT YAPMIYORUZ.
+                    //
+                    // Çünkü kullanıcı henüz authenticated değil.
+                    //
+                    // Kullanıcı mailini doğruladıktan sonra
+                    // giriş yapacak ve ensureProfile()
+                    // otomatik olarak profile oluşturacak.
+
+                    message.textContent =
+                        "KAYIT BAŞARILI! E-POSTANI DOĞRULA.";
+
+                    message.style.color =
+                        "#39ff14";
+
+
+                    document
+                        .getElementById("register-form")
+                        .reset();
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Kayıt hatası:",
+                    error
+                );
+
+
+                message.textContent =
+                    error.message ||
+                    "KAYIT SIRASINDA HATA OLUŞTU.";
+
+                message.style.color =
+                    "#ff4444";
+
+            }
+
+        });
+
+
+    // =====================================================
+    // GİRİŞ YAP
+    // =====================================================
+
+    document
+        .getElementById("login-form")
+        .addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+
+            const email =
+                document
+                    .getElementById("login-email")
+                    .value
+                    .trim();
+
+
+            const password =
+                document
+                    .getElementById("login-password")
+                    .value;
+
+
+            const message =
+                document.getElementById("login-message");
+
+
+            message.textContent =
+                "GİRİŞ YAPILIYOR...";
+
+            message.style.color =
+                "#888";
+
+
+            try {
+
+                // =================================================
+                // SUPABASE LOGIN
+                // =================================================
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth
+                        .signInWithPassword({
+
+                            email: email,
+
+                            password: password
+
+                        });
+
+
+                if (error) {
+
+                    throw error;
+
+                }
+
+
+                // =================================================
+                // PROFİLİ KONTROL ET / OLUŞTUR
+                // =================================================
+
+                await ensureProfile(data.user);
+
+
+                // =================================================
+                // BAŞARILI
+                // =================================================
+
+                message.textContent =
+                    "GİRİŞ BAŞARILI!";
+
+                message.style.color =
+                    "#39ff14";
+
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "index.html";
+
+                }, 700);
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Giriş hatası:",
+                    error
+                );
+
+
+                // Kullanıcı mailini doğrulamamışsa
+                if (
+                    error.message &&
+                    error.message
+                        .toLowerCase()
+                        .includes("email not confirmed")
+                ) {
+
+                    message.textContent =
+                        "ÖNCE E-POSTANI DOĞRULA.";
+
+                }
+
+                else {
+
+                    message.textContent =
+                        "E-POSTA VEYA ŞİFRE HATALI.";
+
+                }
+
+
+                message.style.color =
+                    "#ff4444";
+
+            }
+
+        });
+
+
+    // =====================================================
+    // SAYFA AÇILDIĞINDA SESSION KONTROLÜ
+    // =====================================================
+
+    async function checkSession() {
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.getSession();
+
+
+            if (error) {
+
+                console.error(
+                    "Session kontrol hatası:",
+                    error
+                );
+
+                return;
+
+            }
+
+
+            const session =
+                data.session;
+
+
+            if (session) {
+
+                console.log(
+                    "Doğu Games: Kullanıcı zaten giriş yapmış."
+                );
+
+
+                // Kullanıcının profile kaydı yoksa oluştur
+                await ensureProfile(
+                    session.user
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(
+                "Session hatası:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // =====================================================
+    // BAŞLAT
+    // =====================================================
+
+    checkSession();
+
+</script>
+
+</body>
+
+</html>
