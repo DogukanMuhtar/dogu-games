@@ -419,6 +419,57 @@ body::before {
     border-top: 4px solid #222;
 }
 
+
+/* LEADERBOARD BAŞLIĞI */
+
+.leaderboard-section .section-heading {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+
+.leaderboard-section .section-heading > div {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.leaderboard-section .section-heading .eyebrow {
+    width: 100%;
+
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.leaderboard-section .section-heading h2 {
+    width: 100%;
+
+    margin-top: 0;
+
+    font-size: 35px;
+
+    color: #f5f5dc;
+
+    text-align: center;
+}
+
+
+/* LEADERBOARD TABLOSU */
+
 .leaderboard {
     max-width: 850px;
 
@@ -429,6 +480,7 @@ body::before {
     box-shadow:
         7px 7px 0 #050505;
 }
+
 
 .leaderboard-header,
 .leaderboard-row {
@@ -444,23 +496,28 @@ body::before {
     font-size: 9px;
 }
 
+
 .leaderboard-header {
     color: #666;
 
     background: #080808;
 }
 
+
 .leaderboard-row:last-child {
     border-bottom: none;
 }
+
 
 .leaderboard-row:hover {
     background: #181818;
 }
 
+
 .leaderboard-row .rank {
     color: #39ff14;
 }
+
 
 .leaderboard-row > span:last-child {
     text-align: right;
@@ -942,4 +999,48 @@ footer {
 
 
 
+}
+
+/* =========================================================
+   GAME PAGE - BACK TO HOME BUTTON
+   Used by Snake / Aim Trainer / Typing / 2048 / Pong
+   ========================================================= */
+
+.back-button {
+    width: 126px;
+    height: 49px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #353535;
+    background: transparent;
+
+    color: #f5f5dc;
+    text-decoration: none;
+
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    border-color: #39ff14;
+    color: #39ff14;
+}
+
+/* Prevent browser default link styling on game pages */
+.game-page a.back-button,
+.game-container a.back-button {
+    color: #f5f5dc;
+    text-decoration: none;
+}
+
+.game-page a.back-button:hover,
+.game-container a.back-button:hover {
+    color: #39ff14;
+    text-decoration: none;
 }
