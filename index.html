@@ -6,6 +6,39 @@
 
 <link rel="stylesheet" href="style.css">
 
+<style>
+/* INSERT COIN - ATARI EFEKTİ */
+.hero .eyebrow {
+    font-size: 1.25rem !important;
+    letter-spacing: 0.35em !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    animation: insertCoinBlink 1s steps(2, start) infinite !important;
+    text-shadow:
+        0 0 4px currentColor,
+        0 0 10px rgba(57, 255, 20, 0.65) !important;
+}
+
+@keyframes insertCoinBlink {
+    0%, 45% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    46%, 100% {
+        opacity: 0.18;
+        transform: scale(0.99);
+    }
+}
+
+@media (max-width: 600px) {
+    .hero .eyebrow {
+        font-size: 1.05rem !important;
+        letter-spacing: 0.22em !important;
+    }
+}
+</style>
+
+
 
 <!-- =========================
      NAVBAR
@@ -398,43 +431,42 @@
                 </a>
 
             </article>
-            
-            <!-- =========================
-                 08 - SPACE INVADERS
-            ========================== -->
+<!-- =========================
+     08 - SPACE INVADERS
+========================== -->
 
-            <article class="game-card">
-            
-                <div class="game-number">
-                    08
-                </div>
-            
-            
-                <div class="game-icon">
-                    👾
-                </div>
-            
-            
-                <h3>
-                    SPACE INVADERS
-                </h3>
-            
-            
-                <p>
-                    UZAYLILARI YOK ET.
-                    <br>
-                    GALAKSİYİ KORU.
-                </p>
-            
-            
-                <a
-                    href="games/space-invaders/space.html"
-                    class="play-game-btn"
-                >
-                    OYNA <span>▶</span>
-                </a>
-            
-            </article>
+<article class="game-card">
+
+    <div class="game-number">
+        08
+    </div>
+
+
+    <div class="game-icon">
+        👾
+    </div>
+
+
+    <h3>
+        SPACE INVADERS
+    </h3>
+
+
+    <p>
+        UZAYLILARI YOK ET.
+        <br>
+        GALAKSİYİ KORU.
+    </p>
+
+
+    <a
+        href="games/space-invaders/space.html"
+        class="play-game-btn"
+    >
+        OYNA <span>▶</span>
+    </a>
+
+</article>
 
         </div>
 
