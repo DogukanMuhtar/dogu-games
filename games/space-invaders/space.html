@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#050505"
+    >
+
+    <title>Space Invaders | Doğu Games</title>
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        body {
+
+            background: #050505;
+
+            color: #ffffff;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            overflow: hidden;
+
+            user-select: none;
+            -webkit-user-select: none;
+
+        }
+
+
+        /* =====================================================
+           CRT SCANLINES
+        ===================================================== */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: 999;
+
+            background:
+                repeating-linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0.025) 0px,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px,
+                    transparent 4px
+                );
+
+            opacity: 0.35;
+
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ===================================================== */
+
+        .game-container {
+
+            width: 100%;
+
+            height: 100vh;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                18px 20px;
+
+            position: relative;
+
+        }
+
+
+        /* =====================================================
+           BACK BUTTON
+        ===================================================== */
+
+        .back-btn {
+
+            position: fixed;
+
+            top: 18px;
+
+            left: 22px;
+
+            z-index: 20;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding:
+                10px 15px;
+
+            border:
+                1px solid
+                #39ff14;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.75
+                );
+
+            color:
+                #39ff14;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            transition:
+                all 0.2s ease;
+
+        }
+
+
+        .back-btn:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #050505;
+
+            box-shadow:
+                0 0 18px
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.35
+                );
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .eyebrow {
+
+            font-size: 10px;
+
+            letter-spacing: 4px;
+
+            color:
+                #39ff14;
+
+            margin-bottom: 4px;
+
+            text-align: center;
+
+            opacity: 0.9;
+
+        }
+
+
+        h1 {
+
+            font-size:
+                clamp(
+                    28px,
+                    4vw,
+                    48px
+                );
+
+            line-height: 1;
+
+            letter-spacing: 5px;
+
+            text-align: center;
+
+            color:
+                #39ff14;
+
+            text-shadow:
+                0 0 12px
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.4
+                );
+
+        }
+
+
+        h1 span {
+
+            color:
+                #f8f1d5;
+
+        }
+
+
+        /* =====================================================
+           SCOREBOARD
+        ===================================================== */
+
+        .scoreboard {
+
+            width:
+                min(
+                    760px,
+                    90vw
+                );
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    3,
+                    1fr
+                );
+
+            gap: 10px;
+
+            margin:
+                18px 0 12px;
+
+        }
+
+
+        .score-box {
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.18
+                );
+
+            background:
+                rgba(
+                    10,
+                    10,
+                    10,
+                    0.75
+                );
+
+            padding:
+                8px 12px;
+
+            text-align: center;
+
+            min-height: 52px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                center;
+
+        }
+
+
+        .score-label {
+
+            display: block;
+
+            font-size: 9px;
+
+            letter-spacing: 3px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.4
+                );
+
+            margin-bottom: 3px;
+
+        }
+
+
+        .score-value {
+
+            display: block;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color:
+                #39ff14;
+
+            text-shadow:
+                0 0 8px
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.25
+                );
+
+        }
+
+
+        /* =====================================================
+           GAME AREA
+        ===================================================== */
+
+        .game-wrapper {
+
+            position: relative;
+
+            width:
+                min(
+                    760px,
+                    92vw,
+                    calc(
+                        (100vh - 245px) * 1.3333
+                    )
+                );
+
+            aspect-ratio:
+                4 / 3;
+
+            border:
+                1px solid
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.35
+                );
+
+            background:
+                #020402;
+
+            box-shadow:
+
+                0 0 25px
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.06
+                ),
+
+                inset 0 0 40px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.9
+                );
+
+            overflow: hidden;
+
+        }
+
+
+        /* =====================================================
+           CANVAS
+        ===================================================== */
+
+        #gameCanvas {
+
+            display: block;
+
+            width: 100%;
+
+            height: 100%;
+
+            image-rendering:
+                pixelated;
+
+            image-rendering:
+                crisp-edges;
+
+        }
+
+
+        /* =====================================================
+           OVERLAY
+        ===================================================== */
+
+        .overlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 20px;
+
+            background:
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.72
+                );
+
+            z-index: 5;
+
+        }
+
+
+        .overlay.hidden {
+
+            display: none;
+
+        }
+
+
+        .overlay-title {
+
+            font-size:
+                clamp(
+                    22px,
+                    4vw,
+                    38px
+                );
+
+            font-weight: bold;
+
+            letter-spacing: 4px;
+
+            color:
+                #f8f1d5;
+
+            text-shadow:
+                0 0 12px
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.45
+                );
+
+            margin-bottom: 12px;
+
+        }
+
+
+        .overlay-text {
+
+            font-size:
+                clamp(
+                    9px,
+                    1.2vw,
+                    12px
+                );
+
+            line-height: 1.8;
+
+            letter-spacing: 2px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.55
+                );
+
+            margin-bottom: 20px;
+
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .start-btn {
+
+            border:
+                1px solid
+                #39ff14;
+
+            background:
+                transparent;
+
+            color:
+                #39ff14;
+
+            padding:
+                11px 22px;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 2px;
+
+            cursor: pointer;
+
+            transition:
+                all 0.2s ease;
+
+        }
+
+
+        .start-btn:hover {
+
+            background:
+                #39ff14;
+
+            color:
+                #050505;
+
+            box-shadow:
+                0 0 18px
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.35
+                );
+
+        }
+
+
+        /* =====================================================
+           CONTROLS
+        ===================================================== */
+
+        .controls {
+
+            width:
+                min(
+                    760px,
+                    92vw
+                );
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            margin-top: 9px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.35
+                );
+
+            font-size: 9px;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        .highlight {
+
+            color:
+                #39ff14;
+
+        }
+
+
+        .control-left,
+        .control-right {
+
+            flex: 1;
+
+        }
+
+
+        .control-right {
+
+            text-align: right;
+
+        }
+
+
+        /* =====================================================
+           MOBILE CONTROLS
+        ===================================================== */
+
+        .mobile-controls {
+
+            display: none;
+
+            width:
+                min(
+                    760px,
+                    92vw
+                );
+
+            grid-template-columns:
+                1fr 1fr 1fr;
+
+            gap: 8px;
+
+            margin-top: 8px;
+
+        }
+
+
+        .mobile-btn {
+
+            height: 45px;
+
+            border:
+                1px solid
+                rgba(
+                    57,
+                    255,
+                    20,
+                    0.35
+                );
+
+            background:
+                rgba(
+                    10,
+                    10,
+                    10,
+                    0.8
+                );
+
+            color:
+                #39ff14;
+
+            font-family:
+                "Courier New",
+                Courier,
+                monospace;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            touch-action:
+                manipulation;
+
+        }
+
+
+        .mobile-btn:active {
+
+            background:
+                #39ff14;
+
+            color:
+                #050505;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            .game-container {
+
+                padding:
+                    12px 10px;
+
+            }
+
+
+            .back-btn {
+
+                top: 10px;
+
+                left: 10px;
+
+                padding:
+                    7px 10px;
+
+                font-size: 8px;
+
+            }
+
+
+            .eyebrow {
+
+                font-size: 8px;
+
+                letter-spacing: 3px;
+
+            }
+
+
+            h1 {
+
+                font-size: 25px;
+
+                letter-spacing: 3px;
+
+            }
+
+
+            .scoreboard {
+
+                width: 94vw;
+
+                gap: 5px;
+
+                margin:
+                    12px 0 8px;
+
+            }
+
+
+            .score-box {
+
+                min-height: 44px;
+
+                padding:
+                    5px;
+
+            }
+
+
+            .score-label {
+
+                font-size: 7px;
+
+                letter-spacing: 2px;
+
+            }
+
+
+            .score-value {
+
+                font-size: 15px;
+
+            }
+
+
+            .game-wrapper {
+
+                width: 94vw;
+
+                max-width: 500px;
+
+            }
+
+
+            .controls {
+
+                display: none;
+
+            }
+
+
+            .mobile-controls {
+
+                display: grid;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           SHORT SCREEN
+        ===================================================== */
+
+        @media (max-height: 700px) and (min-width: 601px) {
+
+            .game-container {
+
+                padding:
+                    8px 20px;
+
+            }
+
+
+            .eyebrow {
+
+                font-size: 8px;
+
+            }
+
+
+            h1 {
+
+                font-size: 30px;
+
+            }
+
+
+            .scoreboard {
+
+                margin:
+                    10px 0 8px;
+
+            }
+
+
+            .score-box {
+
+                min-height: 42px;
+
+                padding: 5px;
+
+            }
+
+
+            .score-value {
+
+                font-size: 15px;
+
+            }
+
+
+            .game-wrapper {
+
+                width:
+                    min(
+                        680px,
+                        88vw,
+                        calc(
+                            (100vh - 175px) * 1.3333
+                        )
+                    );
+
+            }
+
+
+            .controls {
+
+                margin-top: 6px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         GERİ DÖN
+    ===================================================== -->
+
+    <a
+        href="../../index.html"
+        class="back-btn"
+    >
+        ← DOĞU GAMES
+    </a>
+
+
+
+    <!-- =====================================================
+         GAME CONTAINER
+    ===================================================== -->
+
+    <main class="game-container">
+
+
+        <p class="eyebrow">
+            INSERT COIN TO START
+        </p>
+
+
+        <h1>
+            SPACE <span>INVADERS</span>
+        </h1>
+
+
+
+        <!-- =================================================
+             SCOREBOARD
+        ================================================== -->
+
+        <div class="scoreboard">
+
+
+            <div class="score-box">
+
+                <span class="score-label">
+                    SCORE
+                </span>
+
+                <span
+                    class="score-value"
+                    id="score"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <span class="score-label">
+                    BEST
+                </span>
+
+                <span
+                    class="score-value"
+                    id="best"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <span class="score-label">
+                    LIVES
+                </span>
+
+                <span
+                    class="score-value"
+                    id="lives"
+                >
+                    3
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             GAME
+        ================================================== -->
+
+        <div class="game-wrapper">
+
+
+            <canvas
+                id="gameCanvas"
+                width="800"
+                height="600"
+            ></canvas>
+
+
+
+            <!-- =================================================
+                 START SCREEN
+            ================================================== -->
+
+            <div
+                class="overlay"
+                id="startOverlay"
+            >
+
+                <div class="overlay-title">
+                    SPACE INVADERS
+                </div>
+
+
+                <div class="overlay-text">
+
+                    DESTROY THE INVADERS.<br>
+                    PROTECT YOUR SHIP.<br>
+                    SET A NEW HIGH SCORE.
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="start-btn"
+                    id="startBtn"
+                >
+                    START GAME ▶
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 GAME OVER
+            ================================================== -->
+
+            <div
+                class="overlay hidden"
+                id="gameOverOverlay"
+            >
+
+                <div class="overlay-title">
+                    GAME OVER
+                </div>
+
+
+                <div
+                    class="overlay-text"
+                    id="gameOverText"
+                >
+                    FINAL SCORE: 0
+                </div>
+
+
+                <button
+                    type="button"
+                    class="start-btn"
+                    id="restartBtn"
+                >
+                    PLAY AGAIN ▶
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             DESKTOP CONTROLS
+        ================================================== -->
+
+        <div class="controls">
+
+
+            <div class="control-left">
+
+                <span class="highlight">
+                    ← →
+                </span>
+
+                MOVE
+
+            </div>
+
+
+            <div>
+
+                <span class="highlight">
+                    SPACE
+                </span>
+
+                FIRE
+
+            </div>
+
+
+            <div class="control-right">
+
+                DESTROY ALL INVADERS
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             MOBILE CONTROLS
+        ================================================== -->
+
+        <div class="mobile-controls">
+
+
+            <button
+                type="button"
+                class="mobile-btn"
+                id="leftBtn"
+            >
+                ◀
+            </button>
+
+
+            <button
+                type="button"
+                class="mobile-btn"
+                id="fireBtn"
+            >
+                🔫
+            </button>
+
+
+            <button
+                type="button"
+                class="mobile-btn"
+                id="rightBtn"
+            >
+                ▶
+            </button>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         SUPABASE
+    ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- =====================================================
+         SPACE INVADERS JS
+    ===================================================== -->
+
+    <script src="space.js"></script>
+
+
+</body>
+
+</html>
