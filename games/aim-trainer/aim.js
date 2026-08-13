@@ -2,334 +2,102 @@
 // DOĞU GAMES - AIM TRAINER
 // ============================================================
 
-
 // ============================================================
 // ELEMENTS
 // ============================================================
 
-const game =
-    document.getElementById("aim-game");
+const game = document.getElementById("aim-game");
+const target = document.getElementById("target");
+const startScreen = document.getElementById("start-screen");
+const startButton = document.getElementById("start-btn");
 
-const target =
-    document.getElementById("target");
-
-const startScreen =
-    document.getElementById("start-screen");
-
-const startButton =
-    document.getElementById("start-btn");
-
-const hitsElement =
-    document.getElementById("hits");
-
-const missesElement =
-    document.getElementById("misses");
-
-const timeElement =
-    document.getElementById("time");
-
-const scoreElement =
-    document.getElementById("score");
+const hitsElement = document.getElementById("hits");
+const missesElement = document.getElementById("misses");
+const timeElement = document.getElementById("time");
+const scoreElement = document.getElementById("score");
 
 
 // ============================================================
-// AUDIO SYSTEM
+// SES DOSYALARI
 // ============================================================
 
-// Artık harici .wav dosyası kullanılmıyor.
-// Sesler doğrudan tarayıcı tarafından üretiliyor.
+// pistol.wav ve miss.wav:
+// games/
+// ├── sounds/
+// │   ├── pistol.wav
+// │   └── miss.wav
+// │
+// └── aim-trainer/
+//     ├── aim.html
+//     └── aim.js
+//
+// aim-trainer ve sounds, games klasörünün altında KARDEŞ klasörler.
+// Yani aim.js'ten sadece BİR üst dizine (games/) çıkıp oradan
+// sounds/ klasörüne girmek yeterli.
+//
+// aim.js -> ../sounds/pistol.wav
+// aim.js -> ../sounds/miss.wav
+// ============================================================
 
-let audioContext = null;
+const pistolSoundURL =
+    new URL(
+        "../sounds/pistol.wav",
+        document.currentScript.src
+    ).href;
+
+const missSoundURL =
+    new URL(
+        "../sounds/miss.wav",
+        document.currentScript.src
+    ).href;
 
 
 // ============================================================
-// AUDIO CONTEXT
+// PISTOL SESİNİ ÇAL
 // ============================================================
 
-function getAudioContext() {
+function playPistolSound() {
 
-    if (!audioContext) {
+    const sound =
+        new Audio(pistolSoundURL);
 
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
+    sound.volume = 0.8;
 
+    sound.currentTime = 0;
 
-        if (!AudioContext) {
+    sound.play().catch(function (error) {
 
-            console.warn(
-                "Bu tarayıcı Web Audio API desteklemiyor."
-            );
+        console.error(
+            "pistol.wav oynatılamadı:",
+            error
+        );
 
-            return null;
-
-        }
-
-
-        audioContext =
-            new AudioContext();
-
-    }
-
-
-    if (
-        audioContext.state === "suspended"
-    ) {
-
-        audioContext.resume();
-
-    }
-
-
-    return audioContext;
+    });
 
 }
 
 
 // ============================================================
-// SES SİSTEMİNİ BAŞLAT
-// ============================================================
-
-function unlockAudio() {
-
-    const audio =
-        getAudioContext();
-
-
-    if (!audio) {
-        return;
-    }
-
-
-    if (
-        audio.state === "suspended"
-    ) {
-
-        audio.resume();
-
-    }
-
-}
-
-
-// ============================================================
-// SILAH SESİ
-// ============================================================
-
-function playHitSound() {
-
-    const audio =
-        getAudioContext();
-
-
-    if (!audio) {
-        return;
-    }
-
-
-    const now =
-        audio.currentTime;
-
-
-    // --------------------------------------------------------
-    // Ana patlama
-    // --------------------------------------------------------
-
-    const oscillator =
-        audio.createOscillator();
-
-
-    const gain =
-        audio.createGain();
-
-
-    oscillator.type =
-        "square";
-
-
-    oscillator.frequency.setValueAtTime(
-        150,
-        now
-    );
-
-
-    oscillator.frequency.exponentialRampToValueAtTime(
-        55,
-        now + 0.09
-    );
-
-
-    gain.gain.setValueAtTime(
-        0.22,
-        now
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        now + 0.11
-    );
-
-
-    oscillator.connect(
-        gain
-    );
-
-
-    gain.connect(
-        audio.destination
-    );
-
-
-    oscillator.start(
-        now
-    );
-
-
-    oscillator.stop(
-        now + 0.12
-    );
-
-
-    // --------------------------------------------------------
-    // Keskin "klik"
-    // --------------------------------------------------------
-
-    const click =
-        audio.createOscillator();
-
-
-    const clickGain =
-        audio.createGain();
-
-
-    click.type =
-        "square";
-
-
-    click.frequency.setValueAtTime(
-        900,
-        now
-    );
-
-
-    click.frequency.exponentialRampToValueAtTime(
-        180,
-        now + 0.035
-    );
-
-
-    clickGain.gain.setValueAtTime(
-        0.10,
-        now
-    );
-
-
-    clickGain.gain.exponentialRampToValueAtTime(
-        0.001,
-        now + 0.04
-    );
-
-
-    click.connect(
-        clickGain
-    );
-
-
-    clickGain.connect(
-        audio.destination
-    );
-
-
-    click.start(
-        now
-    );
-
-
-    click.stop(
-        now + 0.05
-    );
-
-}
-
-
-// ============================================================
-// MISS SESİ
+// MISS SESİNİ ÇAL
 // ============================================================
 
 function playMissSound() {
 
-    const audio =
-        getAudioContext();
+    const sound =
+        new Audio(missSoundURL);
 
+    sound.volume = 0.8;
 
-    if (!audio) {
-        return;
-    }
+    sound.currentTime = 0;
 
+    sound.play().catch(function (error) {
 
-    const now =
-        audio.currentTime;
+        console.error(
+            "miss.wav oynatılamadı:",
+            error
+        );
 
-
-    // --------------------------------------------------------
-    // Düşük frekanslı hata sesi
-    // --------------------------------------------------------
-
-    const oscillator =
-        audio.createOscillator();
-
-
-    const gain =
-        audio.createGain();
-
-
-    oscillator.type =
-        "sawtooth";
-
-
-    oscillator.frequency.setValueAtTime(
-        180,
-        now
-    );
-
-
-    oscillator.frequency.exponentialRampToValueAtTime(
-        70,
-        now + 0.18
-    );
-
-
-    gain.gain.setValueAtTime(
-        0.13,
-        now
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        now + 0.20
-    );
-
-
-    oscillator.connect(
-        gain
-    );
-
-
-    gain.connect(
-        audio.destination
-    );
-
-
-    oscillator.start(
-        now
-    );
-
-
-    oscillator.stop(
-        now + 0.21
-    );
+    });
 
 }
 
@@ -338,49 +106,36 @@ function playMissSound() {
 // GAME SETTINGS
 // ============================================================
 
-const GAME_DURATION =
-    30;
+const GAME_DURATION = 30;
 
-const START_TARGET_SIZE =
-    70;
+const START_TARGET_SIZE = 70;
 
-const MIN_TARGET_SIZE =
-    30;
+const MIN_TARGET_SIZE = 30;
 
 
 // ============================================================
 // GAME VARIABLES
 // ============================================================
 
-let timeLeft =
-    GAME_DURATION;
+let timeLeft = GAME_DURATION;
 
-let hits =
-    0;
+let hits = 0;
 
-let misses =
-    0;
+let misses = 0;
 
-let score =
-    0;
+let score = 0;
 
-let combo =
-    0;
+let combo = 0;
 
-let maxCombo =
-    0;
+let maxCombo = 0;
 
-let gameRunning =
-    false;
+let gameRunning = false;
 
-let gameTimer =
-    null;
+let gameTimer = null;
 
-let targetSpawnTime =
-    0;
+let targetSpawnTime = 0;
 
-let reactionTimes =
-    [];
+let reactionTimes = [];
 
 
 // ============================================================
@@ -389,9 +144,7 @@ let reactionTimes =
 
 let bestScore =
     Number(
-        localStorage.getItem(
-            "aimBestScore"
-        )
+        localStorage.getItem("aimBestScore")
     ) || 0;
 
 
@@ -400,54 +153,38 @@ let bestScore =
 // ============================================================
 
 const comboDisplay =
-    document.createElement(
-        "div"
-    );
+    document.createElement("div");
 
+comboDisplay.style.position = "absolute";
 
-comboDisplay.style.position =
-    "absolute";
+comboDisplay.style.left = "50%";
 
-comboDisplay.style.left =
-    "50%";
-
-comboDisplay.style.top =
-    "25px";
+comboDisplay.style.top = "25px";
 
 comboDisplay.style.transform =
     "translateX(-50%)";
 
-comboDisplay.style.color =
-    "#39ff14";
+comboDisplay.style.color = "#39ff14";
 
 comboDisplay.style.fontFamily =
     "'Courier New', monospace";
 
-comboDisplay.style.fontSize =
-    "18px";
+comboDisplay.style.fontSize = "18px";
 
-comboDisplay.style.fontWeight =
-    "bold";
+comboDisplay.style.fontWeight = "bold";
 
-comboDisplay.style.letterSpacing =
-    "3px";
+comboDisplay.style.letterSpacing = "3px";
 
 comboDisplay.style.textShadow =
     "0 0 8px #39ff14";
 
-comboDisplay.style.pointerEvents =
-    "none";
+comboDisplay.style.pointerEvents = "none";
 
-comboDisplay.style.zIndex =
-    "40";
+comboDisplay.style.zIndex = "40";
 
-comboDisplay.style.display =
-    "none";
+comboDisplay.style.display = "none";
 
-
-game.appendChild(
-    comboDisplay
-);
+game.appendChild(comboDisplay);
 
 
 // ============================================================
@@ -456,101 +193,87 @@ game.appendChild(
 
 function startGame() {
 
-    // Kullanıcı butona bastığı anda
-    // AudioContext'i aktif et.
+    clearInterval(gameTimer);
 
-    unlockAudio();
+    timeLeft = GAME_DURATION;
 
+    hits = 0;
 
-    clearInterval(
-        gameTimer
-    );
+    misses = 0;
 
+    score = 0;
 
-    timeLeft =
-        GAME_DURATION;
+    combo = 0;
 
-    hits =
-        0;
+    maxCombo = 0;
 
-    misses =
-        0;
+    reactionTimes = [];
 
-    score =
-        0;
-
-    combo =
-        0;
-
-    maxCombo =
-        0;
-
-    reactionTimes =
-        [];
+    gameRunning = true;
 
 
-    gameRunning =
-        true;
+    // --------------------------------------------------------
+    // SESLERİ ÖN YÜKLE
+    // --------------------------------------------------------
+
+    const preloadPistol =
+        new Audio(pistolSoundURL);
+
+    preloadPistol.preload = "auto";
+
+    preloadPistol.load();
+
+    const preloadMiss =
+        new Audio(missSoundURL);
+
+    preloadMiss.preload = "auto";
+
+    preloadMiss.load();
 
 
-    // ========================================================
-    // UI RESET
-    // ========================================================
+    // --------------------------------------------------------
+    // UI
+    // --------------------------------------------------------
 
-    hitsElement.textContent =
-        hits;
+    hitsElement.textContent = hits;
 
-    missesElement.textContent =
-        misses;
+    missesElement.textContent = misses;
 
-    scoreElement.textContent =
-        score;
+    scoreElement.textContent = score;
 
-    timeElement.textContent =
-        timeLeft;
+    timeElement.textContent = timeLeft;
 
 
-    // ========================================================
-    // START SCREEN KAPAT
-    // ========================================================
+    // --------------------------------------------------------
+    // START SCREEN
+    // --------------------------------------------------------
 
-    startScreen.style.display =
-        "none";
+    startScreen.style.display = "none";
 
-
-    comboDisplay.style.display =
-        "block";
-
+    comboDisplay.style.display = "block";
 
     updateComboDisplay();
 
 
-    // ========================================================
-    // TARGET RESET
-    // ========================================================
+    // --------------------------------------------------------
+    // TARGET
+    // --------------------------------------------------------
 
-    target.style.display =
-        "block";
-
+    target.style.display = "block";
 
     target.style.width =
         START_TARGET_SIZE + "px";
-
 
     target.style.height =
         START_TARGET_SIZE + "px";
 
 
-    // ========================================================
-    // FIRST TARGET
-    // ========================================================
-
     moveTarget();
 
 
-    // ========================================================
+    // --------------------------------------------------------
     // TIMER
-    // ========================================================
+    // --------------------------------------------------------
 
     gameTimer =
         setInterval(
@@ -569,14 +292,11 @@ function updateTimer() {
 
     timeLeft--;
 
-
     timeElement.textContent =
         timeLeft;
 
 
-    if (
-        timeLeft <= 0
-    ) {
+    if (timeLeft <= 0) {
 
         endGame();
 
@@ -594,14 +314,11 @@ function moveTarget() {
     const gameWidth =
         game.clientWidth;
 
-
     const gameHeight =
         game.clientHeight;
 
-
     const size =
         target.offsetWidth;
-
 
     const padding =
         size / 2 + 10;
@@ -610,7 +327,6 @@ function moveTarget() {
     const minX =
         padding;
 
-
     const maxX =
         gameWidth -
         padding;
@@ -618,7 +334,6 @@ function moveTarget() {
 
     const minY =
         size / 2 + 10;
-
 
     const maxY =
         gameHeight -
@@ -631,8 +346,7 @@ function moveTarget() {
         (
             maxX -
             minX
-        )
-        +
+        ) +
         minX;
 
 
@@ -641,14 +355,12 @@ function moveTarget() {
         (
             maxY -
             minY
-        )
-        +
+        ) +
         minY;
 
 
     target.style.left =
         x + "px";
-
 
     target.style.top =
         y + "px";
@@ -688,7 +400,6 @@ function updateTargetSize() {
     target.style.width =
         size + "px";
 
-
     target.style.height =
         size + "px";
 
@@ -696,17 +407,14 @@ function updateTargetSize() {
 
 
 // ============================================================
-// COMBO DISPLAY
+// COMBO
 // ============================================================
 
 function updateComboDisplay() {
 
-    if (
-        combo < 2
-    ) {
+    if (combo < 2) {
 
-        comboDisplay.textContent =
-            "";
+        comboDisplay.textContent = "";
 
         return;
 
@@ -720,33 +428,30 @@ function updateComboDisplay() {
 
 
 // ============================================================
-// HIT TARGET
+// TARGET HIT
 // ============================================================
 
 target.addEventListener(
-
     "pointerdown",
-
-    function(event) {
+    function (event) {
 
         event.preventDefault();
 
         event.stopPropagation();
 
 
-        if (
-            !gameRunning
-        ) {
+        if (!gameRunning) {
 
             return;
 
         }
 
 
-        // SESİ DOĞRUDAN KULLANICI
-        // ETKİLEŞİMİNDE ÇALIŞTIR.
+        // ====================================================
+        // GERÇEK PISTOL.WAV
+        // ====================================================
 
-        playHitSound();
+        playPistolSound();
 
 
         // ====================================================
@@ -754,8 +459,7 @@ target.addEventListener(
         // ====================================================
 
         const reactionTime =
-            performance.now()
-            -
+            performance.now() -
             targetSpawnTime;
 
 
@@ -773,13 +477,9 @@ target.addEventListener(
         combo++;
 
 
-        if (
-            combo >
-            maxCombo
-        ) {
+        if (combo > maxCombo) {
 
-            maxCombo =
-                combo;
+            maxCombo = combo;
 
         }
 
@@ -802,9 +502,7 @@ target.addEventListener(
                     (
                         600 -
                         reactionTime
-                    )
-                    /
-                    50
+                    ) / 50
                 )
             );
 
@@ -816,9 +514,7 @@ target.addEventListener(
                     (
                         START_TARGET_SIZE -
                         target.offsetWidth
-                    )
-                    *
-                    2
+                    ) * 2
                 )
             );
 
@@ -827,15 +523,12 @@ target.addEventListener(
             (
                 10 *
                 comboMultiplier
-            )
-            +
-            speedBonus
-            +
+            ) +
+            speedBonus +
             sizeBonus;
 
 
-        score +=
-            points;
+        score += points;
 
 
         // ====================================================
@@ -845,7 +538,6 @@ target.addEventListener(
         hitsElement.textContent =
             hits;
 
-
         scoreElement.textContent =
             score;
 
@@ -854,20 +546,14 @@ target.addEventListener(
 
 
         // ====================================================
-        // HIT ANIMATION
+        // TARGET ANIMATION
         // ====================================================
 
-        target.classList.remove(
-            "hit"
-        );
-
+        target.classList.remove("hit");
 
         void target.offsetWidth;
 
-
-        target.classList.add(
-            "hit"
-        );
+        target.classList.add("hit");
 
 
         // ====================================================
@@ -875,13 +561,9 @@ target.addEventListener(
         // ====================================================
 
         createExplosion(
-
             target.offsetLeft,
-
             target.offsetTop,
-
             target.offsetWidth
-
         );
 
 
@@ -890,13 +572,9 @@ target.addEventListener(
         // ====================================================
 
         createScorePopup(
-
             target.offsetLeft,
-
             target.offsetTop,
-
             points
-
         );
 
 
@@ -906,11 +584,9 @@ target.addEventListener(
 
         updateTargetSize();
 
-
         moveTarget();
 
     }
-
 );
 
 
@@ -919,14 +595,10 @@ target.addEventListener(
 // ============================================================
 
 game.addEventListener(
-
     "pointerdown",
+    function (event) {
 
-    function(event) {
-
-        if (
-            !gameRunning
-        ) {
+        if (!gameRunning) {
 
             return;
 
@@ -934,9 +606,7 @@ game.addEventListener(
 
 
         if (
-            target.contains(
-                event.target
-            )
+            target.contains(event.target)
         ) {
 
             return;
@@ -945,26 +615,16 @@ game.addEventListener(
 
 
         // ====================================================
-        // MISS SOUND
+        // GERÇEK MISS.WAV
         // ====================================================
 
         playMissSound();
 
 
-        // ====================================================
-        // MISS
-        // ====================================================
-
         misses++;
 
+        combo = 0;
 
-        combo =
-            0;
-
-
-        // ====================================================
-        // SCORE PENALTY
-        // ====================================================
 
         score =
             Math.max(
@@ -973,13 +633,8 @@ game.addEventListener(
             );
 
 
-        // ====================================================
-        // UI
-        // ====================================================
-
         missesElement.textContent =
             misses;
-
 
         scoreElement.textContent =
             score;
@@ -988,20 +643,12 @@ game.addEventListener(
         updateComboDisplay();
 
 
-        // ====================================================
-        // POPUP
-        // ====================================================
-
         createMissPopup(
-
             event.offsetX,
-
             event.offsetY
-
         );
 
     }
-
 );
 
 
@@ -1009,126 +656,86 @@ game.addEventListener(
 // MISS POPUP
 // ============================================================
 
-function createMissPopup(
-    x,
-    y
-) {
+function createMissPopup(x, y) {
 
     const popup =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
+    popup.textContent = "-50";
 
-    popup.textContent =
-        "-50";
-
-
-    popup.style.position =
-        "absolute";
-
+    popup.style.position = "absolute";
 
     popup.style.left =
         x + "px";
 
-
     popup.style.top =
         y + "px";
-
 
     popup.style.transform =
         "translate(-50%, -50%)";
 
-
     popup.style.color =
         "#ff1744";
-
 
     popup.style.fontFamily =
         "'Courier New', monospace";
 
-
     popup.style.fontSize =
         "22px";
-
 
     popup.style.fontWeight =
         "bold";
 
-
     popup.style.letterSpacing =
         "2px";
-
 
     popup.style.textShadow =
         "0 0 8px rgba(255, 23, 68, 0.8)";
 
-
     popup.style.pointerEvents =
         "none";
-
 
     popup.style.zIndex =
         "45";
 
-
-    game.appendChild(
-        popup
-    );
+    game.appendChild(popup);
 
 
     popup.animate(
-
         [
-
             {
                 transform:
                     "translate(-50%, -50%) scale(1)",
-
-                opacity:
-                    1
+                opacity: 1
             },
 
             {
                 transform:
                     "translate(-50%, -100%) scale(1.15)",
-
-                opacity:
-                    0
+                opacity: 0
             }
-
         ],
-
         {
-
-            duration:
-                600,
-
-            easing:
-                "ease-out"
-
+            duration: 600,
+            easing: "ease-out"
         }
-
     );
 
 
     setTimeout(
-
-        () => {
+        function () {
 
             popup.remove();
 
         },
-
         650
-
     );
 
 }
 
 
 // ============================================================
-// EXPLOSION
+// EXPLOSION EFFECT
 // ============================================================
 
 function createExplosion(
@@ -1137,8 +744,7 @@ function createExplosion(
     size
 ) {
 
-    const count =
-        12;
+    const count = 12;
 
 
     for (
@@ -1148,18 +754,14 @@ function createExplosion(
     ) {
 
         const particle =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
 
         particle.style.position =
             "absolute";
 
-
         particle.style.width =
             "4px";
-
 
         particle.style.height =
             "4px";
@@ -1175,21 +777,18 @@ function createExplosion(
             (
                 x +
                 size / 2
-            )
-            + "px";
+            ) + "px";
 
 
         particle.style.top =
             (
                 y +
                 size / 2
-            )
-            + "px";
+            ) + "px";
 
 
         particle.style.pointerEvents =
             "none";
-
 
         particle.style.zIndex =
             "30";
@@ -1203,15 +802,12 @@ function createExplosion(
         const angle =
             Math.PI *
             2 *
-            (
-                i / count
-            );
+            (i / count);
 
 
         const distance =
             25 +
-            Math.random() *
-            25;
+            Math.random() * 25;
 
 
         const endX =
@@ -1225,15 +821,11 @@ function createExplosion(
 
 
         particle.animate(
-
             [
-
                 {
                     transform:
                         "translate(0, 0)",
-
-                    opacity:
-                        1
+                    opacity: 1
                 },
 
                 {
@@ -1242,36 +834,23 @@ function createExplosion(
                             ${endX}px,
                             ${endY}px
                         )`,
-
-                    opacity:
-                        0
+                    opacity: 0
                 }
-
             ],
-
             {
-
-                duration:
-                    300,
-
-                easing:
-                    "ease-out"
-
+                duration: 300,
+                easing: "ease-out"
             }
-
         );
 
 
         setTimeout(
-
-            () => {
+            function () {
 
                 particle.remove();
 
             },
-
             320
-
         );
 
     }
@@ -1290,9 +869,7 @@ function createScorePopup(
 ) {
 
     const popup =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     popup.textContent =
@@ -1345,50 +922,33 @@ function createScorePopup(
 
 
     popup.animate(
-
         [
-
             {
                 transform:
                     "translate(-50%, -50%)",
-
-                opacity:
-                    1
+                opacity: 1
             },
 
             {
                 transform:
                     "translate(-50%, -100px)",
-
-                opacity:
-                    0
+                opacity: 0
             }
-
         ],
-
         {
-
-            duration:
-                650,
-
-            easing:
-                "ease-out"
-
+            duration: 650,
+            easing: "ease-out"
         }
-
     );
 
 
     setTimeout(
-
-        () => {
+        function () {
 
             popup.remove();
 
         },
-
         700
-
     );
 
 }
@@ -1400,8 +960,7 @@ function createScorePopup(
 
 function endGame() {
 
-    gameRunning =
-        false;
+    gameRunning = false;
 
 
     clearInterval(
@@ -1417,42 +976,28 @@ function endGame() {
         "none";
 
 
-    // ========================================================
-    // ACCURACY
-    // ========================================================
-
     const totalClicks =
         hits +
         misses;
 
 
-    let accuracy =
-        0;
+    let accuracy = 0;
 
 
-    if (
-        totalClicks > 0
-    ) {
+    if (totalClicks > 0) {
 
         accuracy =
             Math.round(
                 (
                     hits /
                     totalClicks
-                )
-                *
-                100
+                ) * 100
             );
 
     }
 
 
-    // ========================================================
-    // AVERAGE REACTION
-    // ========================================================
-
-    let averageReaction =
-        0;
+    let averageReaction = 0;
 
 
     if (
@@ -1461,18 +1006,18 @@ function endGame() {
 
         const totalReaction =
             reactionTimes.reduce(
-
-                (
+                function (
                     total,
                     value
-                ) => {
+                ) {
 
-                    return total + value;
+                    return (
+                        total +
+                        value
+                    );
 
                 },
-
                 0
-
             );
 
 
@@ -1485,18 +1030,12 @@ function endGame() {
     }
 
 
-    // ========================================================
-    // BEST SCORE
-    // ========================================================
-
     const isNewBest =
         score >
         bestScore;
 
 
-    if (
-        isNewBest
-    ) {
+    if (isNewBest) {
 
         bestScore =
             score;
@@ -1510,25 +1049,25 @@ function endGame() {
     }
 
 
-    // ========================================================
-    // GAME OVER
-    // ========================================================
-
     startScreen.style.display =
         "flex";
 
 
-    startScreen.querySelector(
-        "h2"
-    ).textContent =
+    const title =
+        startScreen.querySelector("h2");
+
+
+    const description =
+        startScreen.querySelector("p");
+
+
+    title.textContent =
         isNewBest
             ? "NEW BEST!"
             : "GAME OVER";
 
 
-    startScreen.querySelector(
-        "p"
-    ).innerHTML = `
+    description.innerHTML = `
 
         SCORE:
         <strong>${score}</strong>
@@ -1577,17 +1116,8 @@ function endGame() {
 // ============================================================
 
 startButton.addEventListener(
-
     "click",
-
-    function() {
-
-        // Çok önemli:
-        // Bu gerçek kullanıcı tıklaması olduğu için
-        // ses sistemi burada kesin olarak açılır.
-
-        unlockAudio();
-
+    function () {
 
         startScreen.querySelector(
             "h2"
@@ -1608,5 +1138,4 @@ startButton.addEventListener(
         startGame();
 
     }
-
 );
