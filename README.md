@@ -77,7 +77,6 @@ The interface combines:
 - HTML5
 - CSS3
 - JavaScript
-- Canvas API
 
 ### Backend & Database
 
