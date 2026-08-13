@@ -2,37 +2,44 @@
 // DOĞU GAMES - SUPABASE
 // ==========================================
 
-const DG_SUPABASE_URL = "https://zvxzfwftwvkjvqvdqabo.supabase.co";
+const DG_SUPABASE_URL =
+    "https://zvxzfwftwvkjvqvdqabo.supabase.co";
 
 const DG_SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_GF0KjdrmsluAuSDW9SmkLg_svfG1SrL";
 
 
-// Supabase client'ı sadece bir kere oluştur
+// ==========================================
+// SUPABASE CLIENT
+// ==========================================
+
 if (!window.dgSupabase) {
 
-    window.dgSupabase = window.supabase.createClient(
-        DG_SUPABASE_URL,
-        DG_SUPABASE_PUBLISHABLE_KEY
-    );
+    window.dgSupabase =
+        window.supabase.createClient(
+            DG_SUPABASE_URL,
+            DG_SUPABASE_PUBLISHABLE_KEY
+        );
 
     console.log("Doğu Games - Supabase bağlantısı hazır.");
-}
 
-console.log("Doğu Games aktif! 🎮");
+}
 
 
 // ==========================================
 // SAYFA YÜKLENDİ
 // ==========================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    console.log("Doğu Games hazır.");
+        console.log("Doğu Games hazır.");
 
-    loadLeaderboard();
+        loadLeaderboard();
 
-});
+    }
+);
 
 
 // ==========================================
@@ -41,94 +48,87 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function loadLeaderboard() {
 
-    const leaderboard = document.getElementById("leaderboard-list");
+    const leaderboard =
+        document.getElementById(
+            "leaderboard-list"
+        );
 
 
     if (!leaderboard) {
 
-        console.log("Leaderboard elementi bulunamadı.");
+        console.log(
+            "Leaderboard elementi bulunamadı."
+        );
 
         return;
+
     }
 
 
     try {
 
-        console.log("Leaderboard yükleniyor...");
+        console.log(
+            "Leaderboard yükleniyor..."
+        );
 
 
-        const { data, error } = await window.dgSupabase
+        // ==========================================
+        // 1 - SKORLARI AL
+        // ==========================================
+
+        const {
+            data: scores,
+            error: scoresError
+        } = await window.dgSupabase
 
             .from("scores")
 
-            .select(`
-                score,
-                game,
-                created_at,
-                profiles (
-                    username
-                )
-            `)
+            .select(
+                "id, user_id, game, score, created_at"
+            )
 
-            .order("score", {
-                ascending: false
-            })
+            .order(
+                "score",
+                {
+                    ascending: false
+                }
+            )
 
             .limit(10);
 
 
         // ==========================================
-        // HATA
+        // SKOR HATASI
         // ==========================================
 
-        if (error) {
+        if (scoresError) {
 
-            console.error("Leaderboard hatası:", error);
+            console.error(
+                "Scores hatası:",
+                scoresError
+            );
 
-
-            leaderboard.innerHTML = `
-
-                <div class="leaderboard-header">
-
-                    <span>#</span>
-
-                    <span>PLAYER</span>
-
-                    <span>SCORE</span>
-
-                </div>
-
-
-                <div class="leaderboard-row">
-
-                    <span class="rank">
-                        !
-                    </span>
-
-                    <strong>
-                        VERİ ALINAMADI
-                    </strong>
-
-                    <span>
-                        -
-                    </span>
-
-                </div>
-
-            `;
+            showLeaderboardError();
 
             return;
+
         }
 
 
-        console.log("Leaderboard verileri:", data);
+        console.log(
+            "Scores:",
+            scores
+        );
 
 
         // ==========================================
-        // HİÇ SKOR YOK
+        // SKOR YOK
         // ==========================================
 
-        if (!data || data.length === 0) {
+        if (
+            !scores ||
+            scores.length === 0
+        ) {
 
             leaderboard.innerHTML = `
 
@@ -162,7 +162,82 @@ async function loadLeaderboard() {
             `;
 
             return;
+
         }
+
+
+        // ==========================================
+        // 2 - USER ID'LERİ TOPLA
+        // ==========================================
+
+        const userIds =
+            scores.map(
+                score => score.user_id
+            );
+
+
+        // ==========================================
+        // 3 - PROFILES TABLOSUNDAN
+        // USERNAME'LERİ AL
+        // ==========================================
+
+        const {
+            data: profiles,
+            error: profilesError
+        } = await window.dgSupabase
+
+            .from("profiles")
+
+            .select(
+                "id, username"
+            )
+
+            .in(
+                "id",
+                userIds
+            );
+
+
+        // ==========================================
+        // PROFILE HATASI
+        // ==========================================
+
+        if (profilesError) {
+
+            console.error(
+                "Profiles hatası:",
+                profilesError
+            );
+
+            showLeaderboardError();
+
+            return;
+
+        }
+
+
+        console.log(
+            "Profiles:",
+            profiles
+        );
+
+
+        // ==========================================
+        // PROFILE MAP
+        // ==========================================
+
+        const profileMap = {};
+
+
+        profiles.forEach(
+            function (profile) {
+
+                profileMap[
+                    profile.id
+                ] = profile.username;
+
+            }
+        );
 
 
         // ==========================================
@@ -190,44 +265,76 @@ async function loadLeaderboard() {
         `;
 
 
-        data.forEach(function (item, index) {
+        // ==========================================
+        // SKORLARI OLUŞTUR
+        // ==========================================
+
+        scores.forEach(
+            function (item, index) {
 
 
-            const username =
-                item.profiles?.username || "BİLİNMİYOR";
+                const username =
+                    profileMap[
+                        item.user_id
+                    ] || "BİLİNMİYOR";
 
 
-            const score =
-                Number(item.score).toLocaleString("tr-TR");
+                const score =
+                    Number(
+                        item.score
+                    ).toLocaleString(
+                        "tr-TR"
+                    );
 
 
-            html += `
+                html += `
 
-                <div class="leaderboard-row">
+                    <div class="leaderboard-row">
 
-                    <span class="rank">
-                        ${String(index + 1).padStart(2, "0")}
-                    </span>
+                        <span class="rank">
 
-                    <strong>
-                        ${username}
-                    </strong>
+                            ${String(
+                                index + 1
+                            ).padStart(
+                                2,
+                                "0"
+                            )}
 
-                    <span>
-                        ${score}
-                    </span>
-
-                </div>
-
-            `;
-
-        });
+                        </span>
 
 
-        leaderboard.innerHTML = html;
+                        <strong>
+
+                            ${username}
+
+                        </strong>
 
 
-        console.log("Leaderboard başarıyla yüklendi.");
+                        <span>
+
+                            ${score}
+
+                        </span>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        // ==========================================
+        // EKRANA YAZ
+        // ==========================================
+
+        leaderboard.innerHTML =
+            html;
+
+
+        console.log(
+            "Leaderboard başarıyla yüklendi."
+        );
 
     }
 
@@ -239,38 +346,65 @@ async function loadLeaderboard() {
             error
         );
 
-
-        leaderboard.innerHTML = `
-
-            <div class="leaderboard-header">
-
-                <span>#</span>
-
-                <span>PLAYER</span>
-
-                <span>SCORE</span>
-
-            </div>
-
-
-            <div class="leaderboard-row">
-
-                <span class="rank">
-                    !
-                </span>
-
-                <strong>
-                    BAĞLANTI HATASI
-                </strong>
-
-                <span>
-                    -
-                </span>
-
-            </div>
-
-        `;
+        showLeaderboardError();
 
     }
+
+}
+
+
+// ==========================================
+// LEADERBOARD HATA MESAJI
+// ==========================================
+
+function showLeaderboardError() {
+
+    const leaderboard =
+        document.getElementById(
+            "leaderboard-list"
+        );
+
+
+    if (!leaderboard) {
+        return;
+    }
+
+
+    leaderboard.innerHTML = `
+
+        <div class="leaderboard-header">
+
+            <span>
+                #
+            </span>
+
+            <span>
+                PLAYER
+            </span>
+
+            <span>
+                SCORE
+            </span>
+
+        </div>
+
+
+        <div class="leaderboard-row">
+
+            <span class="rank">
+                !
+            </span>
+
+            <strong>
+                BAĞLANTI HATASI
+            </strong>
+
+            <span>
+                -
+            </span>
+
+        </div>
+
+    `;
 
 }

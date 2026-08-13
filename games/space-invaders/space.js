@@ -15,14 +15,22 @@ const SUPABASE_URL =
     "https://zvxzfwftwvkjvqvdqabo.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_GF0KjdrmsluAuSDW9SmkLg_svFg1SrL";
+    "sb_publishable_GF0KjdrmsluAuSDW9SmkLg_svfG1SrL";
 
 const supabaseClient =
     window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: false
+            }
+        }
     );
 
+console.log("Doğu Games - Supabase bağlantısı hazır.");
 
 /* =========================================================
    CANVAS
@@ -2474,87 +2482,150 @@ function gameOver() {
    SUPABASE LEADERBOARD
 ========================================================= */
 
+/* =========================================================
+   SUPABASE LEADERBOARD
+========================================================= */
+
 async function saveScore() {
 
     try {
 
-        const {
+        // -----------------------------------------
+        // KULLANICIYI AL
+        // -----------------------------------------
 
+        let {
             data: {
                 user
-            },
-
-            error: userError
-
-        } =
-            await supabaseClient.auth.getUser();
+            }
+        } = await supabaseClient.auth.getUser();
 
 
-        /*
-            Kullanıcı giriş yapmamışsa
-            skor leaderboard'a gönderilmiyor.
-        */
+        // -----------------------------------------
+        // GİRİŞ YOKSA ANONYMOUS GİRİŞ YAP
+        // -----------------------------------------
 
-        if (
-            userError ||
-            !user
-        ) {
+        if (!user) {
+
+            console.log("Anonymous kullanıcı oluşturuluyor...");
+
+            const {
+                data,
+                error
+            } = await supabaseClient.auth.signInAnonymously();
+
+
+            if (error) {
+
+                console.error(
+                    "Anonymous giriş hatası:",
+                    error
+                );
+
+                return;
+            }
+
+
+            user = data.user;
 
             console.log(
-                "Kullanıcı giriş yapmamış. Skor kaydedilmedi."
+                "Anonymous kullanıcı oluşturuldu:",
+                user.id
+            );
+
+        }
+
+
+        // -----------------------------------------
+        // SKOR KONTROLÜ
+        // -----------------------------------------
+
+        if (score <= 0) {
+
+            console.log(
+                "Skor 0 olduğu için kaydedilmedi."
             );
 
             return;
-
         }
 
 
-        if (
-            score <= 0
-        ) {
+        // -----------------------------------------
+        // PROFILE OLUŞTUR
+        // -----------------------------------------
 
-            return;
-
-        }
+        const username =
+            "PLAYER-" +
+            user.id
+                .substring(0, 6)
+                .toUpperCase();
 
 
         const {
-            error
-        } =
-            await supabaseClient
-                .from("scores")
-                .insert({
+            error: profileError
+        } = await supabaseClient
 
-                    user_id:
-                        user.id,
+            .from("profiles")
 
-                    score:
-                        score,
+            .upsert({
 
-                    game:
-                        "space-invaders"
+                id: user.id,
 
-                });
+                username: username
+
+            });
 
 
-        if (error) {
+        if (profileError) {
+
+            console.error(
+                "Profile oluşturma hatası:",
+                profileError
+            );
+
+            return;
+        }
+
+
+        // -----------------------------------------
+        // SKORU KAYDET
+        // -----------------------------------------
+
+        const {
+            error: scoreError
+        } = await supabaseClient
+
+            .from("scores")
+
+            .insert({
+
+                user_id: user.id,
+
+                score: score,
+
+                game: "space-invaders"
+
+            });
+
+
+        if (scoreError) {
 
             console.error(
                 "Space Invaders skor kayıt hatası:",
-                error
+                scoreError
             );
 
             return;
-
         }
 
 
         console.log(
-            "Space Invaders skoru leaderboard'a kaydedildi:",
+            "✅ Space Invaders skoru leaderboard'a kaydedildi:",
             score
         );
 
     }
+
 
     catch (error) {
 
