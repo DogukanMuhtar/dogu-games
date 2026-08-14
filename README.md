@@ -19,6 +19,29 @@ The project combines a nostalgic arcade aesthetic with modern web technologies t
 | 05 | 🔢 **2048** | Combine numbers and reach 2048. |
 | 06 | 🏓 **Pong** | Play the classic Pong and defeat your opponent. |
 | 07 | 📌 **Needle Game** | Stick needles into the rotating circle and set a high score. |
+| 08 | 👾 **Space Invaders** | Destroy incoming enemies, survive waves and achieve the highest score. |
+| 09 | 🧱 **Breakout** | Break the blocks, build combos and defeat the final boss. |
+
+---
+
+## 👾 BREAKOUT
+
+Breakout is an enhanced arcade-style game featuring multiple waves, power-ups, combos and a final boss battle.
+
+Players can:
+
+- 🧱 Destroy blocks to progress through waves
+- ⚪ Control the ball with the keyboard
+- 🔥 Increase the ball speed gradually
+- 💥 Build combos for higher scores
+- ⭐ Collect power-ups
+- ❤️ Manage multiple lives
+- 👾 Fight a final boss after clearing the boss-stage blocks
+- 🎯 Reduce the boss's health by hitting it with the ball
+- 🏆 Reach the WIN screen by defeating the boss
+- 💯 Save their final score to the leaderboard
+
+The boss battle only becomes active after all blocks in the boss wave have been destroyed.
 
 ---
 
@@ -50,6 +73,14 @@ The leaderboard and score system are powered by **Supabase**.
 - 🔊 Game sound effects
 - ⚡ Fast and lightweight
 - 🎨 Pixel / CRT-inspired interface
+- 👾 Wave-based arcade gameplay
+- 🧱 Breakout block destruction system
+- 🔥 Combo system
+- ⭐ Power-up system
+- ❤️ Life system
+- 👹 Boss battle system
+- 🏆 Win / Game Over screens
+- 📈 Progressive difficulty
 
 ---
 
@@ -65,6 +96,8 @@ The interface combines:
 - Dark arcade backgrounds
 - Retro game UI elements
 - Minimalistic layouts
+- Arcade-style animations
+- Classic game screen effects
 
 > **INSERT COIN TO START**
 
@@ -101,10 +134,12 @@ DOGU-GAMES/
 │   │
 │   ├── 2048/
 │   ├── aim-trainer/
+│   ├── breakout/
 │   ├── memory/
 │   ├── needle/
 │   ├── pong/
 │   ├── snake/
+│   ├── space-invaders/
 │   └── typing/
 │
 ├── sounds/
