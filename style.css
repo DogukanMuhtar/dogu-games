@@ -18,9 +18,7 @@ html {
 body {
     background: #111;
     color: #f5f5dc;
-
     font-family: 'Press Start 2P', monospace;
-
     image-rendering: pixelated;
 }
 
@@ -36,18 +34,14 @@ button {
 
 
 /* =========================
-   BODY
+   BODY OVERLAY (CRT Effect)
 ========================= */
 
 body::before {
     content: "";
-
     position: fixed;
-
     inset: 0;
-
     pointer-events: none;
-
     background:
         repeating-linear-gradient(
             0deg,
@@ -56,7 +50,6 @@ body::before {
             transparent 1px,
             transparent 4px
         );
-
     z-index: 9999;
 }
 
@@ -67,23 +60,17 @@ body::before {
 
 .navbar {
     height: 75px;
-
     padding: 0 50px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     background: #050505;
-
     border-bottom: 4px solid #f5f5dc;
 }
 
 .logo {
     font-size: 18px;
-
     color: #f5f5dc;
-
     letter-spacing: 1px;
 }
 
@@ -93,15 +80,12 @@ body::before {
 
 .nav-links {
     display: flex;
-
     gap: 30px;
-
     font-size: 10px;
 }
 
 .nav-links a {
     color: #aaa;
-
     transition: 0.1s;
 }
 
@@ -111,19 +95,14 @@ body::before {
 
 .login-btn {
     padding: 12px 15px;
-
     background: #111;
-
     color: #f5f5dc;
-
     border: 2px solid #f5f5dc;
-
     font-size: 9px;
 }
 
 .login-btn:hover {
     background: #f5f5dc;
-
     color: #111;
 }
 
@@ -134,17 +113,12 @@ body::before {
 
 .hero {
     min-height: 620px;
-
     padding: 80px 10%;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     text-align: center;
-
     background: #111;
-
     position: relative;
 }
 
@@ -154,21 +128,15 @@ body::before {
 
 .eyebrow {
     color: #39ff14;
-
     font-size: 10px;
-
     margin-bottom: 30px;
 }
 
 .hero h1 {
     font-size: clamp(45px, 8vw, 90px);
-
     line-height: 1.4;
-
     color: #f5f5dc;
-
-    text-shadow:
-        5px 5px 0 #222;
+    text-shadow: 5px 5px 0 #222;
 }
 
 .hero h1 span {
@@ -177,42 +145,27 @@ body::before {
 
 .hero-text {
     max-width: 600px;
-
     margin: 35px auto 0;
-
     color: #888;
-
     font-size: 10px;
-
     line-height: 2;
 }
 
 .hero-btn {
     display: inline-block;
-
     margin-top: 40px;
-
     padding: 18px 25px;
-
     background: #39ff14;
-
     color: #050505;
-
     border: 4px solid #f5f5dc;
-
-    box-shadow:
-        6px 6px 0 #f5f5dc;
-
+    box-shadow: 6px 6px 0 #f5f5dc;
     font-size: 10px;
-
     transition: 0.1s;
 }
 
 .hero-btn:hover {
     transform: translate(4px, 4px);
-
-    box-shadow:
-        2px 2px 0 #f5f5dc;
+    box-shadow: 2px 2px 0 #f5f5dc;
 }
 
 
@@ -223,12 +176,9 @@ body::before {
 .hero::before,
 .hero::after {
     content: "";
-
     position: absolute;
-
     width: 15px;
     height: 15px;
-
     background: #39ff14;
 }
 
@@ -244,114 +194,77 @@ body::before {
 
 
 /* =========================
-   GAMES
+   GAMES SECTION
 ========================= */
 
 .games-section {
     padding: 100px 8%;
-
     background: #0b0b0b;
-
     border-top: 4px solid #222;
 }
 
 .section-heading {
     margin-bottom: 60px;
-
     text-align: center;
 }
 
 .section-heading h2 {
     margin-top: 20px;
-
     font-size: 35px;
-
     color: #f5f5dc;
 }
 
 .section-description {
     margin: 25px auto 0;
-
     max-width: 600px;
-
     color: #777;
-
     font-size: 9px;
-
     line-height: 2;
 }
 
 
 /* =========================
-   GAME GRID
+   GAME GRID & CARDS
 ========================= */
 
 .games-grid {
     max-width: 1100px;
-
     margin: auto;
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 25px;
 }
 
-
-/* =========================
-   GAME CARD
-========================= */
-
 .game-card {
     min-height: 330px;
-
     padding: 30px;
-
     position: relative;
-
     background: #151515;
-
     border: 4px solid #444;
-
-    box-shadow:
-        6px 6px 0 #050505;
-
+    box-shadow: 6px 6px 0 #050505;
     text-align: center;
-
     transition: 0.1s;
 }
 
 .game-card:hover {
     border-color: #39ff14;
-
     transform: translate(-3px, -3px);
-
-    box-shadow:
-        9px 9px 0 #050505;
+    box-shadow: 9px 9px 0 #050505;
 }
 
 .game-number {
     position: absolute;
-
     top: 15px;
     left: 15px;
-
     color: #555;
-
     font-size: 8px;
 }
 
 .game-icon {
     margin-top: 25px;
-
     margin-bottom: 25px;
-
     font-size: 55px;
-
-    filter:
-        grayscale(1);
+    filter: grayscale(1);
 }
 
 .game-card:hover .game-icon {
@@ -360,49 +273,31 @@ body::before {
 
 .game-card h3 {
     margin-bottom: 20px;
-
     font-size: 18px;
-
     color: #f5f5dc;
 }
 
 .game-card p {
     min-height: 60px;
-
     color: #777;
-
     font-size: 8px;
-
     line-height: 2;
 }
 
 .play-game-btn {
     display: inline-block;
-
     margin-top: 25px;
-
     padding: 13px 15px;
-
     background: transparent;
-
     color: #39ff14;
-
     border: 2px solid #39ff14;
-
     font-size: 9px;
-
     text-decoration: none;
+    transition: 0.1s;
 }
 
 .play-game-btn:hover {
     background: #39ff14;
-
-    color: #050505;
-}
-
-.play-game-btn:hover {
-    background: #39ff14;
-
     color: #050505;
 }
 
@@ -413,115 +308,76 @@ body::before {
 
 .leaderboard-section {
     padding: 100px 8%;
-
     background: #111;
-
     border-top: 4px solid #222;
 }
 
-
-/* LEADERBOARD BAŞLIĞI */
-
 .leaderboard-section .section-heading {
     width: 100%;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     text-align: center;
 }
-
 
 .leaderboard-section .section-heading > div {
     width: 100%;
-
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
-
     text-align: center;
 }
-
 
 .leaderboard-section .section-heading .eyebrow {
     width: 100%;
-
     text-align: center;
-
     margin-bottom: 30px;
 }
 
-
 .leaderboard-section .section-heading h2 {
     width: 100%;
-
     margin-top: 0;
-
     font-size: 35px;
-
     color: #f5f5dc;
-
     text-align: center;
 }
 
-
-/* LEADERBOARD TABLOSU */
-
 .leaderboard {
     max-width: 850px;
-
     margin: auto;
-
     border: 4px solid #444;
-
-    box-shadow:
-        7px 7px 0 #050505;
+    box-shadow: 7px 7px 0 #050505;
 }
-
 
 .leaderboard-header,
 .leaderboard-row {
     display: grid;
-
-    grid-template-columns:
-        100px 1fr 180px;
-
+    grid-template-columns: 100px 1fr 180px;
     padding: 20px;
-
     border-bottom: 2px solid #333;
-
     font-size: 9px;
 }
 
-
 .leaderboard-header {
     color: #666;
-
     background: #080808;
 }
-
 
 .leaderboard-row:last-child {
     border-bottom: none;
 }
 
-
 .leaderboard-row:hover {
     background: #181818;
 }
-
 
 .leaderboard-row .rank {
     color: #39ff14;
 }
 
-
 .leaderboard-row > span:last-child {
     text-align: right;
-
     color: #f5f5dc;
 }
 
@@ -532,24 +388,17 @@ body::before {
 
 footer {
     padding: 45px 8%;
-
     display: flex;
-
     align-items: center;
     justify-content: space-between;
-
     background: #050505;
-
     border-top: 4px solid #f5f5dc;
-
     color: #555;
-
     font-size: 8px;
 }
 
 .footer-logo {
     color: #f5f5dc;
-
     font-size: 14px;
 }
 
@@ -559,21 +408,217 @@ footer {
 
 
 /* =========================
-   RESPONSIVE
+   MEMORY GAME
 ========================= */
 
-@media (max-width: 900px) {
+.memory-wrapper {
+    min-height: 100vh;
+    background: #050505;
+    color: #f5f5dc;
+    font-family: "Courier New", monospace;
+    padding: 30px;
+    box-sizing: border-box;
+}
 
-    .games-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
+.memory-header {
+    max-width: 900px;
+    margin: 0 auto 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #222;
+    padding-bottom: 20px;
+}
 
+.memory-header h1 {
+    margin: 0;
+    color: #39ff14;
+    font-size: 32px;
+    letter-spacing: 5px;
+    text-shadow: 3px 3px 0 #123d0b;
+}
+
+.back-btn {
+    color: #f5f5dc;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    border: 2px solid #333;
+    padding: 10px 14px;
+    transition: 0.15s;
+}
+
+.back-btn:hover {
+    color: #39ff14;
+    border-color: #39ff14;
+}
+
+.memory-stats {
+    display: flex;
+    gap: 25px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.memory-stats div {
+    border: 2px solid #333;
+    min-width: 70px;
+    padding: 8px;
+}
+
+.memory-stats span {
+    display: block;
+    color: #39ff14;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.memory-board {
+    width: min(90vw, 600px);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    perspective: 800px;
+}
+
+.memory-card {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #333;
+    background: #101010;
+    color: #39ff14;
+    padding: 0;
+    cursor: pointer;
+    font-family: "Courier New", monospace;
+    font-size: clamp(24px, 6vw, 42px);
+    font-weight: bold;
+    transform-style: preserve-3d;
+    transition: transform 0.25s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.memory-card:hover {
+    border-color: #39ff14;
+    box-shadow: 0 0 0 2px #123d0b;
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+}
+
+.card-front {
+    background: repeating-linear-gradient(
+        45deg,
+        #0b0b0b,
+        #0b0b0b 4px,
+        #111 4px,
+        #111 8px
+    );
+    color: #39ff14;
+}
+
+.card-back {
+    background: #39ff14;
+    color: #050505;
+    transform: rotateY(180deg);
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+    border-color: #39ff14;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.35);
+    cursor: default;
+}
+
+.memory-controls {
+    max-width: 600px;
+    margin: 30px auto 0;
+    text-align: center;
+}
+
+.memory-controls p {
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.memory-btn {
+    background: #050505;
+    color: #39ff14;
+    border: 2px solid #39ff14;
+    padding: 12px 24px;
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.memory-btn:hover {
+    background: #39ff14;
+    color: #050505;
 }
 
 
-@media (max-width: 650px) {
+/* =========================
+   GAME PAGE - BACK TO HOME BUTTON
+========================= */
 
+.back-button {
+    width: 126px;
+    height: 49px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #353535;
+    background: transparent;
+    color: #f5f5dc;
+    text-decoration: none;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.back-button:hover {
+    border-color: #39ff14;
+    color: #39ff14;
+}
+
+.game-page a.back-button,
+.game-container a.back-button {
+    color: #f5f5dc;
+    text-decoration: none;
+}
+
+.game-page a.back-button:hover,
+.game-container a.back-button:hover {
+    color: #39ff14;
+    text-decoration: none;
+}
+
+
+/* =========================
+   RESPONSIVE MEDIA QUERIES
+========================= */
+
+@media (max-width: 900px) {
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
     .navbar {
         padding: 0 20px;
     }
@@ -601,446 +646,50 @@ footer {
 
     .leaderboard-header,
     .leaderboard-row {
-        grid-template-columns:
-            50px 1fr 100px;
-
+        grid-template-columns: 50px 1fr 100px;
         padding: 15px 10px;
-
         font-size: 7px;
     }
 
     footer {
         flex-direction: column;
-
         gap: 20px;
-
         text-align: center;
     }
-
-    /* =========================================================
-   MEMORY GAME
-   ========================================================= */
-
-.memory-wrapper {
-    min-height: 100vh;
-    background: #050505;
-    color: #f5f5dc;
-    font-family: "Courier New", monospace;
-    padding: 30px;
-    box-sizing: border-box;
 }
-
-
-/* ============================
-   HEADER
-   ============================ */
-
-.memory-header {
-    max-width: 900px;
-    margin: 0 auto 35px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    border-bottom: 2px solid #222;
-    padding-bottom: 20px;
-}
-
-
-.memory-header h1 {
-    margin: 0;
-
-    color: #39ff14;
-
-    font-size: 32px;
-    letter-spacing: 5px;
-
-    text-shadow:
-        3px 3px 0 #123d0b;
-}
-
-
-.back-btn {
-    color: #f5f5dc;
-    text-decoration: none;
-
-    font-size: 12px;
-    letter-spacing: 1px;
-
-    border: 2px solid #333;
-
-    padding: 10px 14px;
-
-    transition: 0.15s;
-}
-
-
-.back-btn:hover {
-    color: #39ff14;
-    border-color: #39ff14;
-}
-
-
-/* ============================
-   STATS
-   ============================ */
-
-.memory-stats {
-    display: flex;
-    gap: 25px;
-
-    font-size: 10px;
-    text-align: center;
-}
-
-
-.memory-stats div {
-    border: 2px solid #333;
-
-    min-width: 70px;
-
-    padding: 8px;
-}
-
-
-.memory-stats span {
-    display: block;
-
-    color: #39ff14;
-
-    font-size: 16px;
-
-    margin-top: 5px;
-}
-
-
-/* ============================
-   MEMORY BOARD
-   ============================ */
-
-.memory-board {
-    width: min(90vw, 600px);
-
-    margin: 0 auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 10px;
-
-    perspective: 800px;
-}
-
-
-/* ============================
-   MEMORY CARD
-   ============================ */
-
-.memory-card {
-
-    position: relative;
-
-    aspect-ratio: 1 / 1;
-
-    border: 2px solid #333;
-
-    background: #101010;
-
-    color: #39ff14;
-
-    padding: 0;
-
-    cursor: pointer;
-
-    font-family: "Courier New", monospace;
-
-    font-size: clamp(24px, 6vw, 42px);
-
-    font-weight: bold;
-
-    transform-style: preserve-3d;
-
-    transition:
-        transform 0.25s,
-        border-color 0.15s,
-        box-shadow 0.15s;
-
-}
-
-
-/* ============================
-   CARD HOVER
-   ============================ */
-
-.memory-card:hover {
-
-    border-color: #39ff14;
-
-    box-shadow:
-        0 0 0 2px #123d0b;
-
-}
-
-
-/* ============================
-   CARD SIDES
-   ============================ */
-
-.card-front,
-.card-back {
-
-    position: absolute;
-
-    inset: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    backface-visibility: hidden;
-
-}
-
-
-/* ============================
-   CARD FRONT
-   ============================ */
-
-.card-front {
-
-    background:
-        repeating-linear-gradient(
-            45deg,
-            #0b0b0b,
-            #0b0b0b 4px,
-            #111 4px,
-            #111 8px
-        );
-
-    color: #39ff14;
-
-}
-
-
-/* ============================
-   CARD BACK
-   ============================ */
-
-.card-back {
-
-    background: #39ff14;
-
-    color: #050505;
-
-    transform: rotateY(180deg);
-
-}
-
-
-/* ============================
-   FLIPPED CARD
-   ============================ */
-
-.memory-card.flipped {
-
-    transform: rotateY(180deg);
-
-}
-
-
-/* ============================
-   MATCHED CARD
-   ============================ */
-
-.memory-card.matched {
-
-    border-color: #39ff14;
-
-    box-shadow:
-        0 0 10px rgba(57, 255, 20, 0.35);
-
-    cursor: default;
-
-}
-
-
-/* ============================
-   CONTROLS
-   ============================ */
-
-.memory-controls {
-
-    max-width: 600px;
-
-    margin: 30px auto 0;
-
-    text-align: center;
-
-}
-
-
-.memory-controls p {
-
-    color: #777;
-
-    font-size: 10px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 20px;
-
-}
-
-
-.memory-btn {
-
-    background: #050505;
-
-    color: #39ff14;
-
-    border: 2px solid #39ff14;
-
-    padding: 12px 24px;
-
-    font-family:
-        "Courier New",
-        monospace;
-
-    font-size: 12px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.15s;
-
-}
-
-
-.memory-btn:hover {
-
-    background: #39ff14;
-
-    color: #050505;
-
-}
-
-
-/* ============================
-   MOBILE
-   ============================ */
 
 @media (max-width: 600px) {
-
     .memory-wrapper {
         padding: 15px;
     }
 
-
     .memory-header {
-
         flex-wrap: wrap;
-
         gap: 15px;
-
         margin-bottom: 25px;
-
     }
-
 
     .memory-header h1 {
-
         order: -1;
-
         width: 100%;
-
         text-align: center;
-
         font-size: 26px;
-
     }
-
 
     .memory-stats {
-
         gap: 8px;
-
     }
-
 
     .memory-stats div {
-
         min-width: 60px;
-
         padding: 6px;
-
     }
-
 
     .memory-board {
-
         gap: 7px;
-
     }
-
 
     .memory-card {
-
         border-width: 2px;
-
     }
-
-}
-
-
-
-}
-
-/* =========================================================
-   GAME PAGE - BACK TO HOME BUTTON
-   Used by Snake / Aim Trainer / Typing / 2048 / Pong
-   ========================================================= */
-
-.back-button {
-    width: 126px;
-    height: 49px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid #353535;
-    background: transparent;
-
-    color: #f5f5dc;
-    text-decoration: none;
-
-    font-family: "Courier New", Courier, monospace;
-    font-size: 11px;
-    font-weight: bold;
-
-    transition: 0.2s;
-}
-
-.back-button:hover {
-    border-color: #39ff14;
-    color: #39ff14;
-}
-
-/* Prevent browser default link styling on game pages */
-.game-page a.back-button,
-.game-container a.back-button {
-    color: #f5f5dc;
-    text-decoration: none;
-}
-
-.game-page a.back-button:hover,
-.game-container a.back-button:hover {
-    color: #39ff14;
-    text-decoration: none;
 }
