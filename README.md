@@ -40,7 +40,7 @@ The leaderboard and score system are powered by **Supabase**.
 
 ## ✨ FEATURES
 
-- 🎮 7 arcade games
+- 🎮 9 arcade games
 - 🕹️ Retro arcade aesthetic
 - 📱 Responsive design
 - 💻 Desktop and mobile support
