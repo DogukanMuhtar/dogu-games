@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ASTEROIDS — DOĞU GAMES</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255,255,255,0.018) 0px,
+                    rgba(255,255,255,0.018) 1px,
+                    transparent 1px,
+                    transparent 4px
+                ),
+                radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(57,255,20,0.05),
+                    transparent 60%
+                ),
+                #050606;
+
+            color: #f4f3df;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            overflow-x: hidden;
+        }
+
+        /* CRT EFFECT */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0px,
+                    transparent 3px,
+                    rgba(255,255,255,0.025) 4px
+                );
+
+            z-index: 999;
+        }
+
+        /* SUBTLE VIGNETTE */
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    transparent 55%,
+                    rgba(0,0,0,0.55) 100%
+                );
+
+            z-index: 998;
+        }
+
+        /* MAIN CONTAINER */
+
+        .game-page {
+            width: 100%;
+            min-height: 100vh;
+
+            padding:
+                22px 26px 35px;
+
+            position: relative;
+        }
+
+        /* HOME BUTTON */
+
+        .home-button {
+            position: absolute;
+
+            top: 22px;
+            left: 26px;
+
+            padding:
+                12px 18px;
+
+            border: 1px solid #39ff14;
+
+            background: transparent;
+
+            color: #39ff14;
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            transition:
+                0.15s ease;
+
+            z-index: 20;
+        }
+
+        .home-button:hover {
+            background: #39ff14;
+            color: #050606;
+
+            box-shadow:
+                0 0 15px rgba(57,255,20,0.35);
+        }
+
+        /* HEADER */
+
+        .game-header {
+            width: 100%;
+
+            text-align: center;
+
+            margin-top: 28px;
+        }
+
+        .insert-coin {
+            color: #39ff14;
+
+            font-size: 12px;
+
+            letter-spacing: 7px;
+
+            margin-bottom: 5px;
+
+            text-shadow:
+                0 0 8px rgba(57,255,20,0.5);
+
+            animation:
+                blinkCoin 1.6s steps(1) infinite;
+        }
+
+        @keyframes blinkCoin {
+            0%, 55% {
+                opacity: 1;
+            }
+            56%, 100% {
+                opacity: 0.35;
+            }
+        }
+
+        .game-title {
+            margin: 0;
+
+            font-size: clamp(
+                38px,
+                5vw,
+                62px
+            );
+
+            letter-spacing: 5px;
+
+            font-weight: bold;
+
+            text-shadow:
+                0 0 10px rgba(244,243,223,0.35);
+        }
+
+        .game-title span {
+            color: #39ff14;
+
+            text-shadow:
+                0 0 12px rgba(57,255,20,0.55);
+        }
+
+        /* SCORE AREA */
+
+        .score-board {
+
+            width: min(
+                950px,
+                90%
+            );
+
+            margin:
+                18px auto 10px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 13px;
+        }
+
+        .score-box {
+
+            border: 1px solid #303332;
+
+            min-height: 53px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background:
+                rgba(0,0,0,0.22);
+
+            position: relative;
+
+            overflow: hidden;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .score-box.pulse {
+            border-color: #39ff14;
+
+            box-shadow:
+                0 0 16px rgba(57,255,20,0.3),
+                inset 0 0 10px rgba(57,255,20,0.12);
+        }
+
+        .score-label {
+
+            font-size: 10px;
+
+            color: #8b8b82;
+
+            letter-spacing: 5px;
+
+            margin-bottom: 3px;
+        }
+
+        .score-value {
+
+            color: #39ff14;
+
+            font-size: 21px;
+
+            text-shadow:
+                0 0 7px rgba(57,255,20,0.45);
+
+            transition:
+                transform 0.15s ease;
+        }
+
+        .score-value.bump {
+            transform:
+                scale(1.18);
+        }
+
+        #lives.low {
+            color: #ff3939;
+
+            text-shadow:
+                0 0 9px rgba(255,57,57,0.6);
+
+            animation:
+                dangerPulse 0.8s ease-in-out infinite;
+        }
+
+        @keyframes dangerPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.45;
+            }
+        }
+
+        /* WAVE */
+
+        .wave {
+
+            text-align: center;
+
+            color: #777870;
+
+            letter-spacing: 5px;
+
+            font-size: 11px;
+
+            margin:
+                12px 0 8px;
+        }
+
+        .wave span {
+            color: #a7a89d;
+
+            transition:
+                color 0.2s ease,
+                text-shadow 0.2s ease;
+        }
+
+        .wave span.flash {
+            color: #39ff14;
+
+            text-shadow:
+                0 0 10px rgba(57,255,20,0.65);
+        }
+
+        /* COMBO */
+
+        .combo-tag {
+
+            position: absolute;
+
+            top: 12px;
+
+            right: 14px;
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            color: #39ff14;
+
+            text-shadow:
+                0 0 8px rgba(57,255,20,0.55);
+
+            opacity: 0;
+
+            transform:
+                translateY(-4px);
+
+            transition:
+                opacity 0.18s ease,
+                transform 0.18s ease;
+
+            pointer-events: none;
+
+            z-index: 5;
+        }
+
+        .combo-tag.show {
+            opacity: 1;
+
+            transform:
+                translateY(0);
+        }
+
+        /* GAME AREA */
+
+        .game-wrapper {
+
+            width: min(
+                830px,
+                88vw
+            );
+
+            aspect-ratio: 1.55 / 1;
+
+            margin:
+                0 auto;
+
+            border:
+                1px solid #39ff14;
+
+            position: relative;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(10,25,10,0.18),
+                    rgba(0,0,0,0.96)
+                );
+
+            overflow: hidden;
+
+            box-shadow:
+                inset 0 0 35px rgba(57,255,20,0.025),
+                0 0 24px rgba(57,255,20,0.06);
+        }
+
+        /* GRID */
+
+        .game-wrapper::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(57,255,20,0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(57,255,20,0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                42px 42px;
+
+            z-index: 1;
+        }
+
+        /* CORNER BRACKETS - ARCADE FEEL */
+
+        .game-wrapper .corner {
+            position: absolute;
+
+            width: 18px;
+            height: 18px;
+
+            border: 2px solid rgba(57,255,20,0.5);
+
+            z-index: 3;
+
+            pointer-events: none;
+        }
+
+        .corner.tl {
+            top: -1px;
+            left: -1px;
+
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner.tr {
+            top: -1px;
+            right: -1px;
+
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner.bl {
+            bottom: -1px;
+            left: -1px;
+
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner.br {
+            bottom: -1px;
+            right: -1px;
+
+            border-left: none;
+            border-top: none;
+        }
+
+        /* CANVAS */
+
+        #gameCanvas {
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        /* START / GAME OVER SCREEN */
+
+        .overlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 10;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            background:
+                rgba(0,0,0,0.4);
+
+            backdrop-filter:
+                blur(1.5px);
+
+            cursor: pointer;
+
+            transition:
+                opacity 0.25s ease;
+        }
+
+        .overlay-content {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 14px;
+
+            animation:
+                overlayFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes overlayFloat {
+            0%, 100% {
+                transform:
+                    translateY(0);
+            }
+            50% {
+                transform:
+                    translateY(-5px);
+            }
+        }
+
+        .overlay-title {
+
+            font-size:
+                clamp(38px, 6vw, 64px);
+
+            font-weight: bold;
+
+            letter-spacing: 4px;
+
+            color: #f4f3df;
+
+            text-shadow:
+                0 0 10px rgba(244,243,223,0.45);
+        }
+
+        .overlay-title span {
+            color: #39ff14;
+
+            text-shadow:
+                0 0 16px rgba(57,255,20,0.7);
+        }
+
+        .overlay-subtitle {
+
+            color: #39ff14;
+
+            font-size: 12px;
+
+            letter-spacing: 6px;
+
+            text-shadow:
+                0 0 8px rgba(57,255,20,0.45);
+
+            animation:
+                blinkCoin 1.4s steps(1) infinite;
+        }
+
+        .overlay-score {
+
+            color: #9b9c93;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+        }
+
+        .overlay-newbest {
+            color: #ffd23f;
+
+            font-size: 11px;
+
+            letter-spacing: 3px;
+
+            text-shadow:
+                0 0 10px rgba(255,210,63,0.55);
+
+            display: none;
+        }
+
+        .overlay-newbest.show {
+            display: block;
+
+            animation:
+                dangerPulse 0.9s ease-in-out infinite;
+        }
+
+        /* CONTROLS */
+
+        .controls {
+
+            width: min(
+                830px,
+                88vw
+            );
+
+            margin:
+                10px auto 0;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            color: #6d6e68;
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+        }
+
+        .controls span {
+            color: #39ff14;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .game-page {
+                padding:
+                    15px 12px 25px;
+            }
+
+            .home-button {
+
+                top: 15px;
+                left: 15px;
+
+                padding:
+                    9px 12px;
+
+                font-size: 10px;
+            }
+
+            .game-header {
+                margin-top: 55px;
+            }
+
+            .insert-coin {
+                font-size: 9px;
+                letter-spacing: 4px;
+            }
+
+            .score-board {
+                width: 95%;
+                gap: 6px;
+            }
+
+            .score-label {
+                font-size: 8px;
+                letter-spacing: 2px;
+            }
+
+            .score-value {
+                font-size: 16px;
+            }
+
+            .game-wrapper {
+                width: 95vw;
+                aspect-ratio: 1.25 / 1;
+            }
+
+            .controls {
+                width: 95vw;
+
+                font-size: 8px;
+            }
+
+            /* MOBİL DOKUNMATİK KONTROLLER */
+
+            .touch-controls {
+                display: flex !important;
+            }
+        }
+
+        /* MOBİL DOKUNMATİK KONTROLLER (varsayılan gizli) */
+
+        .touch-controls {
+            display: none;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            width: min(830px, 88vw);
+
+            margin: 10px auto 0;
+
+            gap: 10px;
+
+            user-select: none;
+
+            -webkit-user-select: none;
+        }
+
+        .touch-left,
+        .touch-right {
+            display: flex;
+
+            gap: 8px;
+        }
+
+        .touch-btn {
+            width: 52px;
+            height: 52px;
+
+            border: 1px solid #39ff14;
+
+            background: rgba(57,255,20,0.06);
+
+            color: #39ff14;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            touch-action: manipulation;
+        }
+
+        .touch-btn:active,
+        .touch-btn.active {
+            background: rgba(57,255,20,0.3);
+
+            box-shadow:
+                0 0 12px rgba(57,255,20,0.4);
+        }
+
+        .touch-btn.fire {
+            width: 68px;
+            height: 68px;
+
+            border-radius: 50%;
+
+            font-size: 11px;
+
+            letter-spacing: 1px;
+        }
+/* =========================================================
+   ASTEROIDS - EKRANA SIĞAN OYUN ALANI
+========================================================= */
+
+/* Oyun alanı */
+.game-wrapper {
+    width: min(
+        900px,
+        86vw,
+        calc((100vh - 300px) * 1.3333)
+    ) !important;
+
+    aspect-ratio: 4 / 3 !important;
+
+    height: auto !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Canvas */
+#gameCanvas {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block !important;
+}
+
+/* =========================================================
+   KISA EKRANLAR
+========================================================= */
+
+@media (max-height: 850px) and (min-width: 601px) {
+
+    .game-container {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .eyebrow {
+        margin-bottom: 4px !important;
+        font-size: 8px !important;
+    }
+
+    h1 {
+        font-size: 32px !important;
+        margin: 4px 0 8px !important;
+    }
+
+    .scoreboard {
+        margin: 6px 0 6px !important;
+    }
+
+    .score-box {
+        min-height: 42px !important;
+        padding: 5px !important;
+    }
+
+    .score-label {
+        font-size: 7px !important;
+    }
+
+    .score-value {
+        font-size: 15px !important;
+    }
+
+    .level-display {
+        margin: 4px 0 !important;
+    }
+
+    .game-wrapper {
+        width: min(
+            780px,
+            82vw,
+            calc((100vh - 270px) * 1.3333)
+        ) !important;
+    }
+
+    .controls {
+        margin-top: 5px !important;
+    }
+}
+
+
+/* =========================================================
+   ÇOK KISA EKRANLAR
+========================================================= */
+
+@media (max-height: 700px) and (min-width: 601px) {
+
+    .game-container {
+        padding-top: 4px !important;
+    }
+
+    .back-btn {
+        top: 10px !important;
+        left: 10px !important;
+    }
+
+    .eyebrow {
+        display: none !important;
+    }
+
+    h1 {
+        font-size: 27px !important;
+        margin: 3px 0 6px !important;
+    }
+
+    .scoreboard {
+        margin: 4px 0 !important;
+    }
+
+    .score-box {
+        min-height: 38px !important;
+    }
+
+    .score-value {
+        font-size: 14px !important;
+    }
+
+    .game-wrapper {
+        width: min(
+            700px,
+            80vw,
+            calc((100vh - 180px) * 1.3333)
+        ) !important;
+    }
+}
+
+
+/* =========================================================
+   MOBİL
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .game-wrapper {
+        width: 94vw !important;
+        max-width: 500px !important;
+
+        aspect-ratio: 4 / 3 !important;
+
+        height: auto !important;
+    }
+
+    #gameCanvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <main class="game-page">
+
+        <!-- ANA SAYFA -->
+
+        <a
+            href="../../index.html"
+            class="home-button"
+        >
+            ← ANA SAYFA
+        </a>
+
+
+        <!-- HEADER -->
+
+        <header class="game-header">
+
+            <div class="insert-coin">
+                INSERT COIN TO START
+            </div>
+
+            <h1 class="game-title">
+                <span>ASTERO</span>IDS
+            </h1>
+
+        </header>
+
+
+        <!-- SCORE -->
+
+        <section class="score-board">
+
+            <div class="score-box" id="scoreBox">
+
+                <div class="score-label">
+                    SCORE
+                </div>
+
+                <div
+                    class="score-value"
+                    id="score"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <div class="score-label">
+                    BEST
+                </div>
+
+                <div
+                    class="score-value"
+                    id="best"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="score-box">
+
+                <div class="score-label">
+                    LIVES
+                </div>
+
+                <div
+                    class="score-value"
+                    id="lives"
+                >
+                    3
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <div class="wave">
+            WAVE <span id="wave">01</span>
+        </div>
+
+
+        <!-- GAME -->
+
+        <section class="game-wrapper" id="gameWrapper">
+
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+
+            <div class="combo-tag" id="comboTag"></div>
+
+            <canvas
+                id="gameCanvas"
+            ></canvas>
+
+
+            <!-- START / GAME OVER -->
+
+            <div
+                class="overlay"
+                id="overlay"
+            >
+
+                <div class="overlay-content">
+
+                    <div
+                        class="overlay-title"
+                        id="overlayTitle"
+                    >
+                        ASTERO<span>IDS</span>
+                    </div>
+
+                    <div
+                        class="overlay-subtitle"
+                        id="overlaySubtitle"
+                    >
+                        TAP TO START
+                    </div>
+
+                    <div
+                        class="overlay-score"
+                        id="overlayScore"
+                    ></div>
+
+                    <div
+                        class="overlay-newbest"
+                        id="overlayNewBest"
+                    >
+                        ★ NEW BEST SCORE ★
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTROLS -->
+
+        <div class="controls">
+
+            <div>
+                <span>← →</span>
+                ROTATE
+            </div>
+
+            <div>
+                <span>↑</span>
+                THRUST
+            </div>
+
+            <div>
+                <span>SPACE</span>
+                FIRE
+            </div>
+
+        </div>
+
+
+        <!-- TOUCH CONTROLS (mobil) -->
+
+        <div class="touch-controls" id="touchControls">
+
+            <div class="touch-left">
+                <div class="touch-btn" id="btnLeft">◄</div>
+                <div class="touch-btn" id="btnRight">►</div>
+            </div>
+
+            <div class="touch-right">
+                <div class="touch-btn" id="btnUp">▲</div>
+                <div class="touch-btn fire" id="btnFire">FIRE</div>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="asteroids.js"></script>
+
+</body>
+</html>
